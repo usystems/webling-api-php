@@ -1,4 +1,7 @@
 # Webling API Wrapper for PHP
+
+[![Build Status](https://travis-ci.org/usystems/webling-api-php.svg?branch=master)](https://travis-ci.org/usystems/webling-api-php)
+
 A Lightweight Webling API Wrapper for PHP.
 
 ## IMPORTANT: This project is still under development and not yet ready for production use!
