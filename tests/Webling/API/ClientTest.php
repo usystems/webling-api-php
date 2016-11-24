@@ -13,6 +13,20 @@ class ClientTest extends PHPUnit_Framework_TestCase
 		$client = new Client("demo.webling.dev", "6781b18c2616772de74043ed0c32f76f");
 		$response = $client->get('/member');
 		$this->assertEquals(200, $response->getStatusCode());
+		$this->assertArrayHasKey('objects', $response->getData());
+
+		$response = $client->get('/member?sort=ID');
+		$this->assertEquals(200, $response->getStatusCode());
+		$this->assertArrayHasKey('objects', $response->getData());
+	}
+
+	/**
+	 * @expectedException Webling\API\ClientException
+	 */
+	public function testGetException()
+	{
+		$client = new Client("random.nonexisting.url.wbl", "6781b18c2616772de74043ed0c32f76f");
+		$client->get('/member');
 	}
 
 	public function testPut()
