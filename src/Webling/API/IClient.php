@@ -14,6 +14,7 @@ interface IClient
 	/**
 	 * @param $path
 	 * @return IResponse
+	 * @throws ClientException
 	 */
 	public function get($path);
 
@@ -21,6 +22,7 @@ interface IClient
 	 * @param $path
 	 * @param $data
 	 * @return IResponse
+	 * @throws ClientException
 	 */
 	public function put($path, $data);
 
@@ -28,12 +30,14 @@ interface IClient
 	 * @param $path
 	 * @param $data
 	 * @return IResponse
+	 * @throws ClientException
 	 */
 	public function post($path, $data);
 
 	/**
 	 * @param $path
 	 * @return IResponse
+	 * @throws ClientException
 	 */
 	public function delete($path);
 }
