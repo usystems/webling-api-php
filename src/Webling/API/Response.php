@@ -2,7 +2,7 @@
 
 namespace Webling\API;
 
-class Response
+class Response implements IResponse
 {
 	protected $code;
 

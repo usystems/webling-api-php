@@ -2,7 +2,7 @@
 
 namespace Webling\API;
 
-class Client
+class Client implements IClient
 {
 	protected $domain;
 
@@ -10,10 +10,6 @@ class Client
 
 	const API_VERSION = '1';
 
-	/**
-	 * @param $domain - url of your webling instance, e.g "demo.webling.ch"
-	 * @param $apikey - your api key
-	 */
 	function __construct($domain, $apikey) {
 		$this->domain = $domain;
 		$this->apikey = $apikey;
