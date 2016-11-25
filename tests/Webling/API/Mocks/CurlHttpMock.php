@@ -25,7 +25,11 @@ class CurlHttpMock extends CurlHttp
 			'https://random.nonexisting.url.wbl/api/1//member?apikey=6781b18c2616772de74043ed0c32f76f' => array(
 				0,
 				''
-			)
+			),
+			'http://demo.webling.dev/api/1//member?apikey=6781b18c2616772de74043ed0c32f76f' => array(
+				200,
+				'{"objects": [469,470,471]}'
+			),
 		),
 		'PUT' => array(
 			'https://demo.webling.dev/api/1//member/477?apikey=6781b18c2616772de74043ed0c32f76f' => array(

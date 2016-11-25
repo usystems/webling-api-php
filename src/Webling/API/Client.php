@@ -70,12 +70,21 @@ class Client implements IClient
 	 * @return string assembled url
 	 */
 	protected function getApiUrl($path) {
+		// append apikey
 		if (strpos($path, '?') === false) {
 			$path_with_apikey = $path . '?apikey=' . $this->apikey;
 		} else {
 			$path_with_apikey = $path . '&apikey=' . $this->apikey;
 		}
-		return 'https://' . $this->domain . '/api/' . self::API_VERSION . '/' . $path_with_apikey;
+
+		// prepend protocol if not passed
+		$protocol = '';
+		if(strpos($this->domain, 'http://') !== 0 && strpos($this->domain, 'https://') !== 0) {
+			$protocol = 'https://';
+		}
+
+		// assemble final url
+		return $protocol . $this->domain . '/api/' . self::API_VERSION . '/' . $path_with_apikey;
 	}
 
 	/**

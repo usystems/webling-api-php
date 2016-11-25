@@ -23,6 +23,14 @@ class ClientTest extends PHPUnit_Framework_TestCase
 		$this->assertArrayHasKey('objects', $response->getData());
 	}
 
+	public function testGetWithProtocol()
+	{
+		$client = new ClientMock("http://demo.webling.dev", "6781b18c2616772de74043ed0c32f76f");
+		$response = $client->get('/member');
+		$this->assertEquals(200, $response->getStatusCode());
+		$this->assertArrayHasKey('objects', $response->getData());
+	}
+
 	/**
 	 * @expectedException Webling\API\ClientException
 	 */
