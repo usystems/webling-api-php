@@ -17,6 +17,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(200, $response->getStatusCode());
 		$this->assertArrayHasKey('objects', $response->getData());
 
+		// test with a param
 		$response = $client->get('/member?sort=ID');
 		$this->assertEquals(200, $response->getStatusCode());
 		$this->assertArrayHasKey('objects', $response->getData());
@@ -25,7 +26,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @expectedException Webling\API\ClientException
 	 */
-	public function testGetException()
+	public function testGetInvalidDomain()
 	{
 		$client = new ClientMock("random.nonexisting.url.wbl", "6781b18c2616772de74043ed0c32f76f");
 		$client->get('/member');
@@ -33,9 +34,30 @@ class ClientTest extends PHPUnit_Framework_TestCase
 
 	public function testPut()
 	{
+		// test with an array data argument
+		$data = [
+			'properties' => [
+				'Vorname' => 'Maria'
+			]
+		];
 		$client = new ClientMock("demo.webling.dev", "6781b18c2616772de74043ed0c32f76f");
-		$response = $client->put('/member/123', "{}");
-		$this->assertEquals(200, $response->getStatusCode());
+		$response = $client->put('/member/477', $data);
+		$this->assertEquals(204, $response->getStatusCode());
+
+		// test with a string data argument
+		$data = '{"properties": {"Vorname": "Maria"}}';
+		$client = new ClientMock("demo.webling.dev", "6781b18c2616772de74043ed0c32f76f");
+		$response = $client->put('/member/477', $data);
+		$this->assertEquals(204, $response->getStatusCode());
+	}
+
+	/**
+	 * @expectedException Webling\API\ClientException
+	 */
+	public function testPutInvalidDomain()
+	{
+		$client = new ClientMock("random.nonexisting.url.wbl", "6781b18c2616772de74043ed0c32f76f");
+		$client->put('/member/477', []);
 	}
 
 	public function testPost()
