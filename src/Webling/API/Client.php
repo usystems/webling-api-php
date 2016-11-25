@@ -56,7 +56,28 @@ class Client implements IClient
 	}
 
 	public function post($path, $data) {
-		return new Response(200, "{}");
+		if (!is_string($data)) {
+			$data = json_encode($data);
+			if (json_last_error() != JSON_ERROR_NONE) {
+				throw new ClientException('Could not encode JSON: ' . json_last_error_msg());
+			}
+		}
+		$url = $this->getApiUrl($path);
+		$curl = $this->getCurlObject();
+		$curl->curl_setopt(CURLOPT_URL, $url);
+		$curl->curl_setopt(CURLOPT_CUSTOMREQUEST, "POST");
+		$curl->curl_setopt(CURLOPT_POST, 1);
+		$curl->curl_setopt(CURLOPT_POSTFIELDS, $data);
+		$curl->curl_setopt(CURLOPT_RETURNTRANSFER, true);
+		$curl->curl_setopt(CURLOPT_SSL_VERIFYPEER, false);
+		$response = $curl->curl_exec();
+		$info = $curl->curl_getinfo();
+		$curl->curl_close();
+
+		if (!isset($info['http_code']) or empty($info['http_code']) or $info['http_code'] === 0) {
+			throw new ClientException('Could not connect to: ' . $url);
+		}
+		return new Response($info['http_code'], $response);
 	}
 
 	public function delete($path) {
@@ -70,6 +91,9 @@ class Client implements IClient
 	 * @return string assembled url
 	 */
 	protected function getApiUrl($path) {
+		// remove extra / at the beginning
+		$path = ltrim($path, '/');
+
 		// append apikey
 		if (strpos($path, '?') === false) {
 			$path_with_apikey = $path . '?apikey=' . $this->apikey;

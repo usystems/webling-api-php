@@ -5,6 +5,7 @@ namespace Webling\API;
 
 /**
  * CurlHttp is a wrapper for the curl functions to make the curl functions mockable
+ * @codeCoverageIgnore
  */
 class CurlHttp
 {

@@ -70,9 +70,31 @@ class ClientTest extends PHPUnit_Framework_TestCase
 
 	public function testPost()
 	{
+		// test with an array data argument
+		$data = [
+			'properties' => [
+				'Vorname' => 'Maria'
+			],
+			'parents' => [550]
+		];
 		$client = new ClientMock("demo.webling.dev", "6781b18c2616772de74043ed0c32f76f");
-		$response = $client->post('/member', "{}");
-		$this->assertEquals(200, $response->getStatusCode());
+		$response = $client->post('/member', $data);
+		$this->assertEquals(201, $response->getStatusCode());
+
+		// test with a string data argument
+		$data = '{"properties": {"Vorname": "Peter"}, "parents": [550]}';
+		$client = new ClientMock("demo.webling.dev", "6781b18c2616772de74043ed0c32f76f");
+		$response = $client->post('/member', $data);
+		$this->assertEquals(201, $response->getStatusCode());
+	}
+
+	/**
+	 * @expectedException Webling\API\ClientException
+	 */
+	public function testPostInvalidDomain()
+	{
+		$client = new ClientMock("random.nonexisting.url.wbl", "6781b18c2616772de74043ed0c32f76f");
+		$client->post('/member', []);
 	}
 
 	public function testDelete()

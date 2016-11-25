@@ -14,29 +14,39 @@ class CurlHttpMock extends CurlHttp
 
 	protected $responses = array(
 		'GET' => array(
-			'https://demo.webling.dev/api/1//member?apikey=6781b18c2616772de74043ed0c32f76f' => array(
+			'https://demo.webling.dev/api/1/member?apikey=6781b18c2616772de74043ed0c32f76f' => array(
 				200,
 				'{"objects": [469,470,471]}'
 			),
-			'https://demo.webling.dev/api/1//member?sort=ID&apikey=6781b18c2616772de74043ed0c32f76f' => array(
+			'https://demo.webling.dev/api/1/member?sort=ID&apikey=6781b18c2616772de74043ed0c32f76f' => array(
 				200,
 				'{"objects": [469,470,471]}'
 			),
-			'https://random.nonexisting.url.wbl/api/1//member?apikey=6781b18c2616772de74043ed0c32f76f' => array(
+			'https://random.nonexisting.url.wbl/api/1/member?apikey=6781b18c2616772de74043ed0c32f76f' => array(
 				0,
 				''
 			),
-			'http://demo.webling.dev/api/1//member?apikey=6781b18c2616772de74043ed0c32f76f' => array(
+			'http://demo.webling.dev/api/1/member?apikey=6781b18c2616772de74043ed0c32f76f' => array(
 				200,
 				'{"objects": [469,470,471]}'
 			),
 		),
 		'PUT' => array(
-			'https://demo.webling.dev/api/1//member/477?apikey=6781b18c2616772de74043ed0c32f76f' => array(
+			'https://demo.webling.dev/api/1/member/477?apikey=6781b18c2616772de74043ed0c32f76f' => array(
 				204,
 				''
 			),
-			'https://random.nonexisting.url.wbl/api/1//member/477?apikey=6781b18c2616772de74043ed0c32f76f' => array(
+			'https://random.nonexisting.url.wbl/api/1/member/477?apikey=6781b18c2616772de74043ed0c32f76f' => array(
+				0,
+				''
+			)
+		),
+		'POST' => array(
+			'https://demo.webling.dev/api/1/member?apikey=6781b18c2616772de74043ed0c32f76f' => array(
+				201,
+				'2500'
+			),
+			'https://random.nonexisting.url.wbl/api/1/member?apikey=6781b18c2616772de74043ed0c32f76f' => array(
 				0,
 				''
 			)
