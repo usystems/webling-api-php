@@ -81,7 +81,20 @@ class Client implements IClient
 	}
 
 	public function delete($path) {
-		return new Response(200, "{}");
+		$url = $this->getApiUrl($path);
+		$curl = $this->getCurlObject();
+		$curl->curl_setopt(CURLOPT_URL, $url);
+		$curl->curl_setopt(CURLOPT_CUSTOMREQUEST, "DELETE");
+		$curl->curl_setopt(CURLOPT_RETURNTRANSFER, true);
+		$curl->curl_setopt(CURLOPT_SSL_VERIFYPEER, false);
+		$response = $curl->curl_exec();
+		$info = $curl->curl_getinfo();
+		$curl->curl_close();
+
+		if (!isset($info['http_code']) or empty($info['http_code']) or $info['http_code'] === 0) {
+			throw new ClientException('Could not connect to: ' . $url);
+		}
+		return new Response($info['http_code'], $response);
 	}
 
 	/**

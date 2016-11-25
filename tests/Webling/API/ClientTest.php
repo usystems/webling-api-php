@@ -100,8 +100,17 @@ class ClientTest extends PHPUnit_Framework_TestCase
 	public function testDelete()
 	{
 		$client = new ClientMock("demo.webling.dev", "6781b18c2616772de74043ed0c32f76f");
-		$response = $client->delete('/member/123');
-		$this->assertEquals(200, $response->getStatusCode());
+		$response = $client->delete('/member/533');
+		$this->assertEquals(204, $response->getStatusCode());
+	}
+
+	/**
+	 * @expectedException Webling\API\ClientException
+	 */
+	public function testDeleteInvalidDomain()
+	{
+		$client = new ClientMock("random.nonexisting.url.wbl", "6781b18c2616772de74043ed0c32f76f");
+		$client->delete('/member/123');
 	}
 
 }

@@ -50,6 +50,16 @@ class CurlHttpMock extends CurlHttp
 				0,
 				''
 			)
+		),
+		'DELETE' => array(
+			'https://demo.webling.dev/api/1/member/533?apikey=6781b18c2616772de74043ed0c32f76f' => array(
+				204,
+				''
+			),
+			'https://random.nonexisting.url.wbl/api/1/member/123?apikey=6781b18c2616772de74043ed0c32f76f' => array(
+				0,
+				''
+			)
 		)
 	);
 
