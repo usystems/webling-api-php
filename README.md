@@ -2,13 +2,15 @@
 
 [![Build Status](https://travis-ci.org/usystems/webling-api-php.svg?branch=master)](https://travis-ci.org/usystems/webling-api-php)
 
-A Lightweight Webling API Wrapper for PHP.
+A Lightweight PHP Wrapper to query the [Webling](https://www.webling.ch/) API.
 
-## IMPORTANT: This project is still under development and not yet ready for production use!
+## Installation
 
 Install with Composer:
 
     composer require usystems/webling-api-php
+
+## Usage
 
 Simple usage:
 
@@ -26,3 +28,9 @@ $response = $api->put('/member', $data);
 $response = $api->post('/member', $data);
 $response = $api->delete('/member/123');
 ```
+
+For more examples see the "examples" folder.
+
+## API Documentation
+
+You can find the Full Documentation of the Webling REST-API at [demo.webling.ch/api](https://demo.webling.ch/api)
