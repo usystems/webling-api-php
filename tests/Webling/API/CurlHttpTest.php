@@ -13,7 +13,7 @@ class CurlHttpTest extends PHPUnit_Framework_TestCase
 	public function testCurlHttp()
 	{
 		$curl = new CurlHttp();
-		$curl->curl_setopt(CURLOPT_URL, 'http://localhost');
+		$curl->curl_setopt(CURLOPT_URL, 'https://www.google.com');
 		$curl->curl_setopt(CURLOPT_CUSTOMREQUEST, 'GET');
 		$curl->curl_setopt(CURLOPT_RETURNTRANSFER, true);
 		$reponse = $curl->curl_exec();
@@ -28,7 +28,7 @@ class CurlHttpTest extends PHPUnit_Framework_TestCase
 	public function testCurlHttps()
 	{
 		$curl = new CurlHttp();
-		$curl->curl_setopt(CURLOPT_URL, 'https://localhost');
+		$curl->curl_setopt(CURLOPT_URL, 'https://any-non-existing-domain.tv');
 		$curl->curl_setopt(CURLOPT_CUSTOMREQUEST, 'GET');
 		$curl->curl_setopt(CURLOPT_RETURNTRANSFER, true);
 		$reponse = $curl->curl_exec();
