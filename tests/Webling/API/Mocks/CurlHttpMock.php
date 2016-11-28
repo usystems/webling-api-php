@@ -30,6 +30,14 @@ class CurlHttpMock extends CurlHttp
 				200,
 				'{"objects": [469,470,471]}'
 			),
+			'https://www.pcwebshop.co.uk/api/1/?apikey=' => array(
+				0,
+				'{"objects": [469,470,471]}'
+			),
+			'http://www.pcwebshop.co.uk/api/1/?apikey=' => array(
+				301,
+				''
+			)
 		),
 		'PUT' => array(
 			'https://demo.webling.dev/api/1/member/477?apikey=6781b18c2616772de74043ed0c32f76f' => array(
@@ -74,6 +82,9 @@ class CurlHttpMock extends CurlHttp
 		$method = $this->options[CURLOPT_CUSTOMREQUEST];
 		$url = $this->options[CURLOPT_URL];
 		if (isset($this->responses[$method][$url])) {
+			if ($this->responses[$method][$url][0] == 0) {
+				throw new ClientException('Could not connect.');
+			}
 			return $this->responses[$method][$url][1];
 		}
 		throw new \Exception('Could not find mock response for: '. $method .' ' . $url);
@@ -88,6 +99,10 @@ class CurlHttpMock extends CurlHttp
 			);
 		}
 		throw new \Exception('Could not find mock response for: '. $method .' ' . $url);
+	}
+
+	public function curl_error() {
+		return '';
 	}
 
 	public function curl_close() {}
