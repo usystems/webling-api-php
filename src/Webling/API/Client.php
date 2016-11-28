@@ -28,7 +28,13 @@ class Client implements IClient
 		if (!is_string($data)) {
 			$data = json_encode($data);
 			if (json_last_error() != JSON_ERROR_NONE) {
-				throw new ClientException('Could not encode JSON: ' . json_last_error_msg());
+				if (function_exists('json_last_error_msg')) {
+					// json_last_error_msg() only exists in PHP >= 5.5
+					throw new ClientException('Could not encode JSON: ' . json_last_error_msg());
+				} else {
+					// PHP < 5.5
+					throw new ClientException('Could not encode JSON');
+				}
 			}
 		}
 		$url = $this->getApiUrl($path);
@@ -44,7 +50,13 @@ class Client implements IClient
 		if (!is_string($data)) {
 			$data = json_encode($data);
 			if (json_last_error() != JSON_ERROR_NONE) {
-				throw new ClientException('Could not encode JSON: ' . json_last_error_msg());
+				if (function_exists('json_last_error_msg')) {
+					// json_last_error_msg() only exists in PHP >= 5.5
+					throw new ClientException('Could not encode JSON: ' . json_last_error_msg());
+				} else {
+					// PHP < 5.5
+					throw new ClientException('Could not encode JSON');
+				}
 			}
 		}
 		$url = $this->getApiUrl($path);
