@@ -45,7 +45,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
 		// test with an array data argument
 		$data = [
 			'properties' => [
-				'Vorname' => 'Maria'
+				'Vorname' => "Maria"
 			]
 		];
 		$client = new ClientMock("demo.webling.dev", "6781b18c2616772de74043ed0c32f76f");
@@ -54,6 +54,22 @@ class ClientTest extends PHPUnit_Framework_TestCase
 
 		// test with a string data argument
 		$data = '{"properties": {"Vorname": "Maria"}}';
+		$client = new ClientMock("demo.webling.dev", "6781b18c2616772de74043ed0c32f76f");
+		$response = $client->put('/member/477', $data);
+		$this->assertEquals(204, $response->getStatusCode());
+	}
+
+	/**
+	 * @expectedException Webling\API\ClientException
+	 */
+	public function testPutInvalidJson()
+	{
+		// test with an array data argument
+		$data = [
+			'properties' => [
+				'Vorname' => "invalid sequen\xce utf8"
+			]
+		];
 		$client = new ClientMock("demo.webling.dev", "6781b18c2616772de74043ed0c32f76f");
 		$response = $client->put('/member/477', $data);
 		$this->assertEquals(204, $response->getStatusCode());
@@ -86,6 +102,22 @@ class ClientTest extends PHPUnit_Framework_TestCase
 		$client = new ClientMock("demo.webling.dev", "6781b18c2616772de74043ed0c32f76f");
 		$response = $client->post('/member', $data);
 		$this->assertEquals(201, $response->getStatusCode());
+	}
+
+	/**
+	 * @expectedException Webling\API\ClientException
+	 */
+	public function testPostInvalidJson()
+	{
+		// test with an array data argument
+		$data = [
+			'properties' => [
+				'Vorname' => "invalid sequen\xce utf8"
+			]
+		];
+		$client = new ClientMock("demo.webling.dev", "6781b18c2616772de74043ed0c32f76f");
+		$response = $client->post('/member', $data);
+		$this->assertEquals(204, $response->getStatusCode());
 	}
 
 	/**
