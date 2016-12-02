@@ -37,7 +37,26 @@ class CurlHttpMock extends CurlHttp
 			'http://www.pcwebshop.co.uk/api/1/?apikey=' => array(
 				301,
 				''
-			)
+			),
+
+			// FileCacheTests
+			'https://demo.webling.dev/api/1/member/506?apikey=6781b18c2616772de74043ed0c32f76f' => array(
+				200,
+				'{"type":"member","readonly":false,"properties":{"ID":38,"Vorname":"Markus"},"children":[],"parents":[555],"links":{"debitor":[885,1138,1902]}}'
+			),
+			'https://demo.webling.dev/api/1/membergroup/550?apikey=6781b18c2616772de74043ed0c32f76f' => array(
+				200,
+				'{"type":"membergroup","readonly":false,"properties":{"title":"Mitglieder"},"children":{"membergroup":[555,551,556,558,552]},"parents":[],"links":[]}'
+			),
+
+			'https://demo.webling.dev/api/1/replicate?apikey=6781b18c2616772de74043ed0c32f76f' => array(
+				200,
+				'{"revision": 1602,"version": 740}'
+			),
+			'https://demo.webling.dev/api/1/replicate/1602?apikey=6781b18c2616772de74043ed0c32f76f' => array(
+				200,
+				'{"objects":{"member":[506],"membergroup":[550]},"context":[],"definitions":[],"settings":false,"quota":true,"subscription":false,"revision":1602,"version":740}'
+			),
 		),
 		'PUT' => array(
 			'https://demo.webling.dev/api/1/member/477?apikey=6781b18c2616772de74043ed0c32f76f' => array(
