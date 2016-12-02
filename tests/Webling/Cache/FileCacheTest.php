@@ -16,11 +16,11 @@ class FileCacheTest extends PHPUnit_Framework_TestCase
 		$client = new ClientMock("demo.webling.dev", "6781b18c2616772de74043ed0c32f76f");
 		$cache = new FileCache($client, []);
 
-		$CACHE_DIR = __DIR__. '/../../webling_api_cache/';
+		$CACHE_DIR = $cache->getCacheDir();
 		$this->assertTrue(file_exists($CACHE_DIR));
 
 		$member = $cache->getObject('member', 506);
-		$member = $cache->getObject('membergroup', 550);
+		$membergroup = $cache->getObject('membergroup', 550);
 		$this->assertArrayHasKey('properties', $member);
 
 		// cleanup
@@ -40,7 +40,7 @@ class FileCacheTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue(file_exists($CACHE_DIR));
 
 		$member = $cache->getObject('member', 506);
-		$member = $cache->getObject('membergroup', 550);
+		$membergroup = $cache->getObject('membergroup', 550);
 		$this->assertArrayHasKey('properties', $member);
 
 		// cleanup
