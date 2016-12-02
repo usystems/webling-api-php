@@ -26,7 +26,10 @@ class CurlHttp
 		$info = $this->curl_getinfo();
 		$error = $this->curl_error();
 		if (strlen($error) > 0 or empty($info['http_code'])) {
-			throw new ClientException('Could not connect to: ' . (isset($this->options[CURLOPT_CUSTOMREQUEST]) ?: '') . ' Error: '. $error);
+			throw new ClientException('Could not connect to: '
+				. (isset($this->options[CURLOPT_CUSTOMREQUEST]) ? $this->options[CURLOPT_CUSTOMREQUEST] : '') . ' '
+				. (isset($this->options[CURLOPT_URL]) ? $this->options[CURLOPT_URL] : '')
+				. ' Error: '. $error);
 		}
 		return $response;
 	}
