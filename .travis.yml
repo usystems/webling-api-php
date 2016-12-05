@@ -5,9 +5,19 @@ php:
   - '5.6'
   - '7.0'
 
-before_script:
-  - rm composer.lock
-  - composer self-update
-  - composer install --prefer-source --no-interaction --dev
+cache:
+  directories:
+   - $HOME/.composer/cache
 
-script: php vendor/bin/phpunit "$@" --configuration tests/phpunit_coverage.xml ./tests
+before_install:
+ - rm composer.lock
+ - composer self-update
+ - composer install --prefer-source --no-interaction --dev
+ - composer require satooshi/php-coveralls '~1.0|dev-master'
+
+script:
+ - mkdir -p build/logs
+ - php vendor/bin/phpunit --configuration tests/phpunit_coverage.xml ./tests --coverage-clover build/logs/clover.xml
+
+after_script:
+ - php vendor/bin/coveralls -v
