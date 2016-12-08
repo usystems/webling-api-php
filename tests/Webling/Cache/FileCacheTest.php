@@ -98,4 +98,21 @@ class FileCacheTest extends PHPUnit_Framework_TestCase
 		rmdir($CACHE_DIR);
 	}
 
+	public function testGetObjectNotFound()
+	{
+		$client = new ClientMock("demo.webling.dev", "6781b18c2616772de74043ed0c32f76f");
+		$cache = new FileCache($client);
+
+		$CACHE_DIR = $cache->getCacheDir();
+		$this->assertTrue(file_exists($CACHE_DIR));
+
+		$member = $cache->getObject('member', 999999);
+		$this->assertEquals(null, $member);
+		$this->assertFalse(file_exists($CACHE_DIR.'/obj_999999.json'));
+
+		// cleanup
+		$cache->clearCache();
+		rmdir($CACHE_DIR);
+	}
+
 }

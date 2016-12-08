@@ -79,9 +79,16 @@ class FileCache implements ICache {
 		if ($cached != null) {
 			return json_decode($cached, true);
 		} else {
-			$data = $this->client->get($type.'/'.$objectId)->getData();
-			$this->setObjectCache($objectId, $data);
-			return $data;
+			$response = $this->client->get($type.'/'.$objectId);
+
+			// only cache 2XX responses
+			if ($response->getStatusCode() <= 200 && $response->getStatusCode() < 300) {
+				$data = $response->getData();
+				$this->setObjectCache($objectId, $data);
+				return $data;
+			} else {
+				return null;
+			}
 		}
 	}
 
