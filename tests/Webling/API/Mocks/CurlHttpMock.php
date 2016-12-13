@@ -53,11 +53,19 @@ class CurlHttpMock extends CurlHttp
 				200,
 				'{"revision": 1602,"version": 740}'
 			),
+			'https://demo.webling.dev/api/1/replicate/1600?apikey=6781b18c2616772de74043ed0c32f76f' => array(
+				200,
+				'{"objects":{},"context":[],"definitions":[],"settings":false,"quota":false,"subscription":false,"revision":1602,"version":740}'
+			),
 			'https://demo.webling.dev/api/1/replicate/1602?apikey=6781b18c2616772de74043ed0c32f76f' => array(
 				200,
 				'{"objects":{"member":[506],"membergroup":[550]},"context":[],"definitions":[],"settings":false,"quota":true,"subscription":false,"revision":1602,"version":740}'
 			),
 			'https://demo.webling.dev/api/1/member/999999?apikey=6781b18c2616772de74043ed0c32f76f' => array(
+				404,
+				''
+			),
+			'https://demo.webling.dev/api/1/nonexistingendpoint?apikey=6781b18c2616772de74043ed0c32f76f' => array(
 				404,
 				''
 			),

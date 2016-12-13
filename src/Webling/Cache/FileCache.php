@@ -49,6 +49,12 @@ class FileCache implements ICache {
 						}
 					}
 
+					// delete all root cache objects if the revision has changed
+					// this could be done more efficient, but lets keep it simple for simplicity
+					if ($index['revision'] != $replicate['revision']) {
+						$this->deleteRootCache();
+					}
+
 					// update index file
 					$index['revision'] = $replicate['revision'];
 					$index['timestamp'] = time();
@@ -70,7 +76,8 @@ class FileCache implements ICache {
 	}
 
 	public function clearCache() {
-		array_map('unlink', glob($this->options['directory']."/obj*.json"));
+		array_map('unlink', glob($this->options['directory']."/obj_*.json"));
+		$this->deleteRootCache();
 		unlink($this->indexFile());
 	}
 
@@ -92,9 +99,23 @@ class FileCache implements ICache {
 		}
 	}
 
-	public function getDefinitions() {
-		// TODO: implement caching
-		return $this->client->get('/definition')->getData();
+	public function getRoot($type) {
+		$type = preg_replace('/[^a-z]/i', '', strtolower($type));
+		$cached = $this->getRootCache($type);
+		if ($cached != null) {
+			return json_decode($cached, true);
+		} else {
+			$response = $this->client->get($type);
+
+			// only cache 2XX responses
+			if ($response->getStatusCode() <= 200 && $response->getStatusCode() < 300) {
+				$data = $response->getData();
+				$this->setRootCache($type, $data);
+				return $data;
+			} else {
+				return null;
+			}
+		}
 	}
 
 	public function getCacheDir() {
@@ -130,5 +151,25 @@ class FileCache implements ICache {
 				throw new CacheException('Could not delete cache file: ' . $file);
 			}
 		}
+	}
+
+	private function getRootCache($type) {
+		$type = preg_replace('/[^a-z]/i', '', strtolower($type));
+		$file = $this->options['directory'].'/root_'.$type.'.json';
+		if (file_exists($file)) {
+			return file_get_contents($file);
+		} else {
+			return null;
+		}
+	}
+
+	private function setRootCache($type, $data) {
+		$type = preg_replace('/[^a-z]/i', '', strtolower($type));
+		$file = $this->options['directory'].'/root_'.$type.'.json';
+		file_put_contents($file, json_encode($data));
+	}
+
+	private function deleteRootCache() {
+		array_map('unlink', glob($this->options['directory']."/root_*.json"));
 	}
 }

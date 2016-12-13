@@ -48,7 +48,7 @@ class FileCacheTest extends PHPUnit_Framework_TestCase
 		rmdir($CACHE_DIR);
 	}
 
-	public function testLoadFromCache()
+	public function testLoadObjectFromCache()
 	{
 		$client = new ClientMock("demo.webling.dev", "6781b18c2616772de74043ed0c32f76f");
 		$cache = new FileCache($client);
@@ -71,7 +71,7 @@ class FileCacheTest extends PHPUnit_Framework_TestCase
 		rmdir($CACHE_DIR);
 	}
 
-	public function testUpdateCache()
+	public function testUpdateObjectCache()
 	{
 		$client = new ClientMock("demo.webling.dev", "6781b18c2616772de74043ed0c32f76f");
 		$cache = new FileCache($client);
@@ -109,6 +109,94 @@ class FileCacheTest extends PHPUnit_Framework_TestCase
 		$member = $cache->getObject('member', 999999);
 		$this->assertEquals(null, $member);
 		$this->assertFalse(file_exists($CACHE_DIR.'/obj_999999.json'));
+
+		// cleanup
+		$cache->clearCache();
+		rmdir($CACHE_DIR);
+	}
+
+	public function testLoadRootFromCache()
+	{
+		$client = new ClientMock("demo.webling.dev", "6781b18c2616772de74043ed0c32f76f");
+		$cache = new FileCache($client);
+
+		$CACHE_DIR = $cache->getCacheDir();
+		$this->assertTrue(file_exists($CACHE_DIR));
+
+		$member = $cache->getRoot('member');
+		$this->assertArrayHasKey('objects', $member);
+
+		$this->assertTrue(file_exists($CACHE_DIR.'/root_member.json'));
+
+		// write some dummy content to check the file is loaded from cache
+		$dummycache = ['loadedfrom' => 'cache'];
+		file_put_contents($CACHE_DIR . '/root_member.json', json_encode($dummycache));
+
+		$member = $cache->getRoot('member');
+		$this->assertEquals($dummycache, $member);
+
+		// cleanup
+		$cache->clearCache();
+		rmdir($CACHE_DIR);
+	}
+
+	public function testClearRootCacheOnRevisionChange()
+	{
+		$client = new ClientMock("demo.webling.dev", "6781b18c2616772de74043ed0c32f76f");
+		$cache = new FileCache($client);
+
+		$CACHE_DIR = $cache->getCacheDir();
+		$this->assertTrue(file_exists($CACHE_DIR));
+
+		$member = $cache->getRoot('member');
+		$this->assertArrayHasKey('objects', $member);
+
+
+		$index = [
+			'revision' => 1600,
+			'timestamp' => time() - 3600
+		];
+		file_put_contents($CACHE_DIR.'/index.json', json_encode($index));
+
+
+		$client = new ClientMock("demo.webling.dev", "6781b18c2616772de74043ed0c32f76f");
+		$cache = new FileCache($client);
+
+		$this->assertFalse(file_exists($CACHE_DIR.'/root_member.json'));
+
+
+		// cleanup
+		$cache->clearCache();
+		rmdir($CACHE_DIR);
+	}
+
+	public function testGetRootNotFound()
+	{
+		$client = new ClientMock("demo.webling.dev", "6781b18c2616772de74043ed0c32f76f");
+		$cache = new FileCache($client);
+
+		$CACHE_DIR = $cache->getCacheDir();
+		$this->assertTrue(file_exists($CACHE_DIR));
+
+		$response = $cache->getRoot('nonexistingendpoint');
+		$this->assertEquals(null, $response);
+		$this->assertFalse(file_exists($CACHE_DIR.'/root_nonexistingendpoint.json'));
+
+		// cleanup
+		$cache->clearCache();
+		rmdir($CACHE_DIR);
+	}
+
+	public function testRootCacheSpecialChars()
+	{
+		$client = new ClientMock("demo.webling.dev", "6781b18c2616772de74043ed0c32f76f");
+		$cache = new FileCache($client);
+
+		$CACHE_DIR = $cache->getCacheDir();
+		$this->assertTrue(file_exists($CACHE_DIR));
+
+		$response = $cache->getRoot('non/exist/../../ing=<>:"/\|?*endpoint');
+		$this->assertEquals(null, $response);
 
 		// cleanup
 		$cache->clearCache();

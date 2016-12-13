@@ -38,10 +38,13 @@ interface ICache
 	 */
 	public function getObject($type, $objectId);
 
+
 	/**
+	 * Get a root object of an endpoint (e.g "/member", "/config")
+	 *
+	 * @param $type string - the name of the root node (e.g "member", "usergroup", ..)
 	 * @return array|null
 	 * @throws CacheException
 	 */
-	public function getDefinitions();
-
+	public function getRoot($type);
 }
