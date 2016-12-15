@@ -39,10 +39,9 @@ class CurlHttp
 		$info = $this->curl_getinfo();
 		$error = $this->curl_error();
 		if (strlen($error) > 0 or empty($info['http_code'])) {
-			throw new ClientException('Could not connect to: '
-				. (isset($this->options[CURLOPT_CUSTOMREQUEST]) ? $this->options[CURLOPT_CUSTOMREQUEST] : '') . ' '
-				. (isset($this->options[CURLOPT_URL]) ? $this->options[CURLOPT_URL] : '')
-				. ' Error: '. $error);
+			$method = (isset($this->options[CURLOPT_CUSTOMREQUEST]) ? $this->options[CURLOPT_CUSTOMREQUEST] : '');
+			$url = $this->removeApikeyFromUrl((isset($this->options[CURLOPT_URL]) ? $this->options[CURLOPT_URL] : ''));
+			throw new ClientException('Could not connect to: ' . $method . ' ' . $url . ' Error: '. $error);
 		}
 		return $response;
 	}
@@ -57,5 +56,9 @@ class CurlHttp
 
 	public function curl_error() {
 		return curl_error($this->curl);
+	}
+
+	private function removeApikeyFromUrl($url) {
+		return preg_replace('/apikey=([a-zA-Z0-9]*)/', 'apikey=__removed__', $url);
 	}
 }
