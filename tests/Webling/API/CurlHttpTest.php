@@ -34,4 +34,17 @@ class CurlHttpTest extends PHPUnit_Framework_TestCase
 		$reponse = $curl->curl_exec();
 	}
 
+	/**
+	 * @expectedException Webling\API\ClientException
+	 * @expectedExceptionMessage Could not connect to: GET https://any-non-existing-domain.tv?apikey=__removed__ Error: Couldn't resolve host 'any-non-existing-domain.tv'
+	 */
+	public function testReplaceApikeyInExceptionMessage()
+	{
+		$curl = new CurlHttp();
+		$curl->curl_setopt(CURLOPT_URL, 'https://any-non-existing-domain.tv?apikey=thisShouldBeReplaced123');
+		$curl->curl_setopt(CURLOPT_CUSTOMREQUEST, 'GET');
+		$curl->curl_setopt(CURLOPT_RETURNTRANSFER, true);
+		$reponse = $curl->curl_exec();
+	}
+
 }

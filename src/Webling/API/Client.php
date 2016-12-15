@@ -13,6 +13,12 @@ class Client implements IClient
 	function __construct($domain, $apikey) {
 		$this->domain = $domain;
 		$this->apikey = $apikey;
+		if (!$domain) {
+			throw new ClientException('Invalid domain');
+		}
+		if (!$apikey || strlen($apikey) != 32) {
+			throw new ClientException('Invalid apikey, the apikey must be 32 chars');
+		}
 	}
 
 	public function get($path) {

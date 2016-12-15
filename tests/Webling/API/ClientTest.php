@@ -33,10 +33,31 @@ class ClientTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @expectedException Webling\API\ClientException
+	 * @expectedExceptionMessage Could not connect.
 	 */
 	public function testGetInvalidDomain()
 	{
 		$client = new ClientMock("random.nonexisting.url.wbl", "6781b18c2616772de74043ed0c32f76f");
+		$client->get('/member');
+	}
+
+	/**
+	 * @expectedException Webling\API\ClientException
+	 * @expectedExceptionMessage Invalid domain
+	 */
+	public function testGetEmptyDomain()
+	{
+		$client = new ClientMock("", "6781b18c2616772de74043ed0c32f76f");
+		$client->get('/member');
+	}
+
+	/**
+	 * @expectedException Webling\API\ClientException
+	 * @expectedExceptionMessage Invalid apikey, the apikey must be 32 chars
+	 */
+	public function testGetInvalidApikey()
+	{
+		$client = new ClientMock("http://demo.webling.dev", "abc");
 		$client->get('/member');
 	}
 

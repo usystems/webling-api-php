@@ -30,11 +30,11 @@ class CurlHttpMock extends CurlHttp
 				200,
 				'{"objects": [469,470,471]}'
 			),
-			'https://www.pcwebshop.co.uk/api/1/?apikey=' => array(
+			'https://www.pcwebshop.co.uk/api/1/?apikey=12345678901234567890123456789012' => array(
 				0,
 				'{"objects": [469,470,471]}'
 			),
-			'http://www.pcwebshop.co.uk/api/1/?apikey=' => array(
+			'http://www.pcwebshop.co.uk/api/1/?apikey=12345678901234567890123456789012' => array(
 				301,
 				''
 			),
