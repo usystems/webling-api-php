@@ -8,12 +8,25 @@ namespace Webling\API;
  */
 class CurlHttp
 {
+	/**
+	 * @var int The number of seconds to wait while trying to connect. Use 0 to wait indefinitely.
+	 */
+	protected $CURLOPT_CONNECTTIMEOUT = 4;
+
+	/**
+	 * @var int The maximum number of seconds to allow cURL functions to execute.
+	 */
+	protected $CURLOPT_TIMEOUT = 30;
+
 	protected $curl;
 
 	protected $options = array();
 
 	function __construct() {
 		$this->curl = curl_init();
+		// set default timeout options
+		$this->curl_setopt(CURLOPT_CONNECTTIMEOUT, $this->CURLOPT_CONNECTTIMEOUT);
+		$this->curl_setopt(CURLOPT_TIMEOUT, $this->CURLOPT_TIMEOUT);
 	}
 
 	public function curl_setopt($option, $value) {
