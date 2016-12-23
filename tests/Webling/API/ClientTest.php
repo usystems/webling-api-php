@@ -33,7 +33,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @expectedException Webling\API\ClientException
-	 * @expectedExceptionMessage Could not connect.
+	 * @expectedExceptionMessage Could not connect to
 	 */
 	public function testGetInvalidDomain()
 	{
@@ -59,6 +59,33 @@ class ClientTest extends PHPUnit_Framework_TestCase
 	{
 		$client = new ClientMock("http://demo.webling.dev", "abc");
 		$client->get('/member');
+	}
+
+	public function testGetInitWithOptions()
+	{
+		$options = [
+			'connecttimeout' => 0,
+			'timeout' => 5,
+			'useragent' => 'My Custom User-Agent'
+		];
+		$client = new ClientMock("http://demo.webling.dev", "6781b18c2616772de74043ed0c32f76f", $options);
+		$response = $client->get('/member');
+		$this->assertEquals(200, $response->getStatusCode());
+		$this->assertArrayHasKey('objects', $response->getData());
+	}
+
+	public function testGetSetOptions()
+	{
+		$options = [
+			'connecttimeout' => 0,
+			'timeout' => 5,
+			'useragent' => 'My Custom User-Agent'
+		];
+		$client = new ClientMock("http://demo.webling.dev", "6781b18c2616772de74043ed0c32f76f");
+		$client->setOptions($options);
+		$response = $client->get('/member');
+		$this->assertEquals(200, $response->getStatusCode());
+		$this->assertArrayHasKey('objects', $response->getData());
 	}
 
 	public function testPut()

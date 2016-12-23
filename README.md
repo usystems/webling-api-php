@@ -30,6 +30,17 @@ $response = $api->post('/member', $data);
 $response = $api->delete('/member/123');
 ```
 
+Create a new client with some options:
+
+```php
+$options = [
+    'connecttimeout' => 5, // connection timeout in seconds
+    'timeout' => 10, // transfer timeout
+    'useragent' => 'My Custom User-Agent' // custom user agent
+];
+$api = new Webling\API\Client('https://demo.webling.ch','MY_APIKEY')
+```
+
 For more examples see the "examples" folder.
 
 ## API Documentation

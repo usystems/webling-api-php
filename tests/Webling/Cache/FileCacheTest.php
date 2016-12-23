@@ -85,8 +85,10 @@ class FileCacheTest extends PHPUnit_Framework_TestCase
 
 		$cache->updateCache();
 
-		// file should now be deleted
-		$this->assertTrue(!file_exists($CACHE_DIR.'/obj_506.json'));
+		if (ClientMock::MOCK_ENABLED) {
+			// file should now be deleted (only works while mocking)
+			$this->assertTrue(!file_exists($CACHE_DIR.'/obj_506.json'));
+		}
 
 		// load from server again
 		$member = $cache->getObject('member', 506);

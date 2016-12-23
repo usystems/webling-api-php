@@ -12,12 +12,14 @@ class ClientMock extends Client
 			$curl->curl_setopt(CURLOPT_URL, $url);
 			$curl->curl_setopt(CURLOPT_CUSTOMREQUEST, $method);
 			$curl->curl_setopt(CURLOPT_RETURNTRANSFER, true);
+			$this->applyOptionsToCurl($curl);
 			return $curl;
 		} else {
 			$curl = new CurlHttp();
 			$curl->curl_setopt(CURLOPT_URL, $url);
 			$curl->curl_setopt(CURLOPT_CUSTOMREQUEST, $method);
 			$curl->curl_setopt(CURLOPT_RETURNTRANSFER, true);
+			$this->applyOptionsToCurl($curl);
 			return $curl;
 		}
 	}

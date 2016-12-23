@@ -115,7 +115,7 @@ class CurlHttpMock extends CurlHttp
 		$url = $this->options[CURLOPT_URL];
 		if (isset($this->responses[$method][$url])) {
 			if ($this->responses[$method][$url][0] == 0) {
-				throw new ClientException('Could not connect.');
+				throw new ClientException('Could not connect to: ');
 			}
 			return $this->responses[$method][$url][1];
 		}

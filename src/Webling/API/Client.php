@@ -8,9 +8,35 @@ class Client implements IClient
 
 	protected $apikey;
 
+	/**
+	 * @var int The default number of seconds to wait while trying to connect. Use 0 to wait indefinitely.
+	 */
+	protected $CURLOPT_CONNECTTIMEOUT = 4;
+
+	/**
+	 * @var int The default maximum number of seconds to allow cURL functions to execute.
+	 */
+	protected $CURLOPT_TIMEOUT = 30;
+
+	/**
+	 * @var string The default HTTP user-agent header
+	 */
+	protected $CURLOPT_USERAGENT = 'Webling-API-PHP/1.1';
+
 	const API_VERSION = '1';
 
-	function __construct($domain, $apikey) {
+	/**
+	 * Client constructor.
+	 * @param string $domain - your webling address, e.g: "demo.webling.ch"
+	 * @param string $apikey - your API-Key
+	 * @param array $options - array of optional options
+	 *          'connecttimeout' => int The number of seconds to wait while trying to connect. Use 0 to wait indefinitely.
+	 *          'timeout' => int The maximum number of seconds to allow cURL functions to execute.
+	 *          'useragent' => string The HTTP user-agent header.
+	 *
+	 * @throws ClientException
+	 */
+	function __construct($domain, $apikey, $options = []) {
 		$this->domain = $domain;
 		$this->apikey = $apikey;
 		if (!$domain) {
@@ -18,6 +44,26 @@ class Client implements IClient
 		}
 		if (!$apikey || strlen($apikey) != 32) {
 			throw new ClientException('Invalid apikey, the apikey must be 32 chars');
+		}
+
+		$this->setOptions($options);
+	}
+
+	/**
+	 * @param array $options - for details see the constructors $options param
+	 * @see __construct
+	 */
+	public function setOptions($options) {
+		if (is_array($options)) {
+			if (isset($options['connecttimeout'])) {
+				$this->CURLOPT_CONNECTTIMEOUT = $options['connecttimeout'];
+			}
+			if (isset($options['timeout'])) {
+				$this->CURLOPT_TIMEOUT = $options['timeout'];
+			}
+			if (isset($options['useragent'])) {
+				$this->CURLOPT_USERAGENT = $options['useragent'];
+			}
 		}
 	}
 
@@ -111,6 +157,18 @@ class Client implements IClient
 		return $protocol . $this->domain . '/api/' . self::API_VERSION . '/' . $path_with_apikey;
 	}
 
+	protected function applyOptionsToCurl(CurlHttp $curl) {
+		if ($this->CURLOPT_CONNECTTIMEOUT != null) {
+			$curl->curl_setopt(CURLOPT_CONNECTTIMEOUT, $this->CURLOPT_CONNECTTIMEOUT);
+		}
+		if ($this->CURLOPT_TIMEOUT != null) {
+			$curl->curl_setopt(CURLOPT_TIMEOUT, $this->CURLOPT_TIMEOUT);
+		}
+		if ($this->CURLOPT_USERAGENT != null) {
+			$curl->curl_setopt(CURLOPT_USERAGENT, $this->CURLOPT_USERAGENT);
+		}
+	}
+
 	/**
 	 * Get a new curl instance, encapsulated to make it mockable
 	 * @param string $url - Request url
@@ -122,6 +180,7 @@ class Client implements IClient
 		$curl->curl_setopt(CURLOPT_URL, $url);
 		$curl->curl_setopt(CURLOPT_CUSTOMREQUEST, $method);
 		$curl->curl_setopt(CURLOPT_RETURNTRANSFER, true);
+		$this->applyOptionsToCurl($curl);
 		return $curl;
 	}
 }
