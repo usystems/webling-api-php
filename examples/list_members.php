@@ -21,16 +21,16 @@ if ($response->getStatusCode() == 200) {
 		foreach ($data['objects'] as $memberId) {
 
 			// fetch the member data
-			$response2 = $client->get('/member/' . $memberId);
+			$response_member = $client->get('/member/' . $memberId);
 
 			// check if request was successful
-			if ($response->getStatusCode() == 200) {
+			if ($response_member->getStatusCode() == 200) {
 
 				// print memberdata
-				$memberdata = $response2->getData();
+				$memberdata = $response_member->getData();
 				echo $memberdata['properties']['Vorname'] . ' ' . $memberdata['properties']['Name'] . "<br>\n";
 			} else {
-				echo 'ERROR: ' . $response->getStatusCode() . ' ' . $response->getRawData() . "<br>\n";
+				echo 'ERROR: ' . $response_member->getStatusCode() . ' ' . $response_member->getRawData() . "<br>\n";
 			}
 		}
 	}
