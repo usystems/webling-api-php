@@ -39,26 +39,34 @@ class FileCache implements ICache {
 		if (file_exists($this->indexFile())) {
 			$index = json_decode(file_get_contents($this->indexFile()), true);
 			if (isset($index['revision'])) {
+
 				$replicate = $this->client->get('/replicate/'.$index['revision'])->getData();
 				if (isset($replicate['revision'])) {
 
-					// delete cached objects
-					foreach ($replicate['objects'] as $objCategory) {
-						foreach ($objCategory as $obj) {
-							$this->deleteObjectCache($obj);
+					if ($replicate['revision'] < 0) {
+						// if revision is set to -1, clear cache and make a complete sync
+						// this happens when the users permission have changed
+						$this->clearCache();
+					} else {
+
+						// delete cached objects
+						foreach ($replicate['objects'] as $objCategory) {
+							foreach ($objCategory as $obj) {
+								$this->deleteObjectCache($obj);
+							}
 						}
-					}
 
-					// delete all root cache objects if the revision has changed
-					// this could be done more efficient, but lets keep it simple for simplicity
-					if ($index['revision'] != $replicate['revision']) {
-						$this->deleteRootCache();
-					}
+						// delete all root cache objects if the revision has changed
+						// this could be done more efficient, but lets keep it simple for simplicity
+						if ($index['revision'] != $replicate['revision']) {
+							$this->deleteRootCache();
+						}
 
-					// update index file
-					$index['revision'] = $replicate['revision'];
-					$index['timestamp'] = time();
-					file_put_contents($this->indexFile(), json_encode($index));
+						// update index file
+						$index['revision'] = $replicate['revision'];
+						$index['timestamp'] = time();
+						file_put_contents($this->indexFile(), json_encode($index));
+					}
 
 				} else {
 					throw new CacheException('Error in replication. No revision found.');
