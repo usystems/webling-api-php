@@ -13,7 +13,7 @@ Install with Composer:
 
 ## Usage
 
-Simple usage:
+### Simple usage
 
 ```php
 $api = new Webling\API\Client('https://demo.webling.ch','MY_APIKEY')
@@ -42,6 +42,33 @@ $api = new Webling\API\Client('https://demo.webling.ch','MY_APIKEY')
 ```
 
 For more examples see the "examples" folder.
+
+### Caching Data
+
+If you are doing lots of GET requests, you may want to use a cache. The FileCache lets you cache Webling API requests on the filesystem. 
+It does check which objects have changed and only fetches the changed objects.
+
+This is how you use the FileCache:
+
+```php
+// create a cache object
+$client = new Webling\API\Client('https://demo.webling.ch','MY_APIKEY')
+$cache = new FileCache($client, [
+    'directory' => './webling_cache'
+]);
+
+// get object
+$cache->getObject('member', 506);
+
+// get object lists
+$cache->getObject('membergroup');
+
+// check for updates and renew cache
+$cache->updateCache();
+
+// clear the whole cache
+$cache->clearCache();
+```
 
 ## API Documentation
 
