@@ -36,7 +36,7 @@ class CurlHttpTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @expectedException Webling\API\ClientException
-	 * @expectedExceptionMessage Could not connect to: GET https://any-non-existing-domain.tv?apikey=__removed__ Error: Couldn't resolve host 'any-non-existing-domain.tv'
+	 * @expectedExceptionMessage Could not connect to: GET https://any-non-existing-domain.tv?apikey=__removed__
 	 */
 	public function testReplaceApikeyInExceptionMessage()
 	{
