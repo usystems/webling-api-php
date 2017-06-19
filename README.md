@@ -53,7 +53,7 @@ This is how you use the FileCache:
 ```php
 // create a cache object
 $client = new Webling\API\Client('https://demo.webling.ch','MY_APIKEY')
-$cache = new FileCache($client, [
+$cache = new Webling\Cache\FileCache($client, [
     'directory' => './webling_cache'
 ]);
 
