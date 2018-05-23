@@ -47,6 +47,10 @@ class FileCache implements ICache {
 						// if revision is set to -1, clear cache and make a complete sync
 						// this happens when the users permission have changed
 						$this->clearCache();
+					} else if(count($replicate['definitions']) > 0) {
+						// if definitions changed, clear cache and make a complete sync
+						// because member data may be invalid now
+						$this->clearCache();
 					} else {
 
 						// delete cached objects
