@@ -131,7 +131,7 @@ class Client implements IClient
 	}
 
 	/**
-	 * Build full URL and append Apikey
+	 * Build full URL
 	 *
 	 * @param $path
 	 * @return string assembled url
@@ -140,13 +140,6 @@ class Client implements IClient
 		// remove extra / at the beginning
 		$path = ltrim($path, '/');
 
-		// append apikey
-		if (strpos($path, '?') === false) {
-			$path_with_apikey = $path . '?apikey=' . $this->apikey;
-		} else {
-			$path_with_apikey = $path . '&apikey=' . $this->apikey;
-		}
-
 		// prepend protocol if not passed
 		$protocol = '';
 		if(strpos($this->domain, 'http://') !== 0 && strpos($this->domain, 'https://') !== 0) {
@@ -154,7 +147,7 @@ class Client implements IClient
 		}
 
 		// assemble final url
-		return $protocol . $this->domain . '/api/' . self::API_VERSION . '/' . $path_with_apikey;
+		return $protocol . $this->domain . '/api/' . self::API_VERSION . '/' . $path;
 	}
 
 	protected function applyOptionsToCurl(CurlHttp $curl) {
@@ -180,6 +173,7 @@ class Client implements IClient
 		$curl->curl_setopt(CURLOPT_URL, $url);
 		$curl->curl_setopt(CURLOPT_CUSTOMREQUEST, $method);
 		$curl->curl_setopt(CURLOPT_RETURNTRANSFER, true);
+		$curl->curl_setopt(CURLOPT_HTTPHEADER, ['apikey:' . $this->apikey] );
 		$this->applyOptionsToCurl($curl);
 		return $curl;
 	}
