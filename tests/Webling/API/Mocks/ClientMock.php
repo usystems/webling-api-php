@@ -12,6 +12,7 @@ class ClientMock extends Client
 			$curl->curl_setopt(CURLOPT_URL, $url);
 			$curl->curl_setopt(CURLOPT_CUSTOMREQUEST, $method);
 			$curl->curl_setopt(CURLOPT_RETURNTRANSFER, true);
+			$curl->curl_setopt(CURLOPT_HTTPHEADER, ['apikey:' . '6781b18c2616772de74043ed0c32f76f'] );
 			$this->applyOptionsToCurl($curl);
 			return $curl;
 		} else {
@@ -19,6 +20,7 @@ class ClientMock extends Client
 			$curl->curl_setopt(CURLOPT_URL, $url);
 			$curl->curl_setopt(CURLOPT_CUSTOMREQUEST, $method);
 			$curl->curl_setopt(CURLOPT_RETURNTRANSFER, true);
+			$curl->curl_setopt(CURLOPT_HTTPHEADER, ['apikey:' . '6781b18c2616772de74043ed0c32f76f'] );
 			$this->applyOptionsToCurl($curl);
 			return $curl;
 		}
