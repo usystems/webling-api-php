@@ -38,7 +38,7 @@ $options = [
     'timeout' => 10, // transfer timeout
     'useragent' => 'My Custom User-Agent' // custom user agent
 ];
-$api = new Webling\API\Client('https://demo.webling.ch','MY_APIKEY')
+$api = new Webling\API\Client('https://demo.webling.ch','MY_APIKEY', $options)
 ```
 
 For more examples see the "examples" folder.
