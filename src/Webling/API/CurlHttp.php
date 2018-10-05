@@ -27,7 +27,7 @@ class CurlHttp
 		$error = $this->curl_error();
 		if (strlen($error) > 0 or empty($info['http_code'])) {
 			$method = (isset($this->options[CURLOPT_CUSTOMREQUEST]) ? $this->options[CURLOPT_CUSTOMREQUEST] : '');
-			$url = $this->removeApikeyFromUrl((isset($this->options[CURLOPT_URL]) ? $this->options[CURLOPT_URL] : ''));
+			$url = (isset($this->options[CURLOPT_URL]) ? $this->options[CURLOPT_URL] : '');
 			throw new ClientException('Could not connect to: ' . $method . ' ' . $url . ' Error: '. $error);
 		}
 		return $response;
@@ -45,7 +45,4 @@ class CurlHttp
 		return curl_error($this->curl);
 	}
 
-	private function removeApikeyFromUrl($url) {
-		return preg_replace('/apikey=([a-zA-Z0-9]*)/', 'apikey=__removed__', $url);
-	}
 }
