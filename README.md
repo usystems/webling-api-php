@@ -69,6 +69,14 @@ $cache->updateCache();
 // clear the whole cache
 $cache->clearCache();
 ```
+## Requirements
+
+To use this library you need at least:
+
+ * PHP >=5.4
+ * PHP cURL Extension
+ * PHP JSON Extension
+ * A [Webling](https://www.webling.ch) Account with API enabled
 
 ## API Documentation
 
