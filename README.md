@@ -57,8 +57,11 @@ $cache = new Webling\Cache\FileCache($client, [
     'directory' => './webling_cache'
 ]);
 
-// get object
+// get single object
 $cache->getObject('member', 506);
+
+// get multiple objects
+$cache->getObjects('member', [506, 507, 508]);
 
 // get object lists
 $cache->getObject('membergroup');
