@@ -101,7 +101,7 @@ class FileCache implements ICache {
 			$response = $this->client->get($type.'/'.$objectId);
 
 			// only cache 2XX responses
-			if ($response->getStatusCode() <= 200 && $response->getStatusCode() < 300) {
+			if ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300) {
 				$data = $response->getData();
 				$this->setObjectCache($objectId, $data);
 				return $data;
