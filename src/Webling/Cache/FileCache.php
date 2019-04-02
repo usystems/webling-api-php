@@ -18,6 +18,11 @@ class FileCache implements ICache {
 			$this->options['directory'] = './webling_api_cache/';
 		}
 
+		if (!isset($this->options['chunk_size'])) {
+			// how many objects to fetch at once
+			$this->options['chunk_size'] = 250;
+		}
+
 		if (!file_exists($this->options['directory'])) {
 			$success = mkdir($this->options['directory'], 0755, false);
 			if (!$success) {
@@ -108,6 +113,48 @@ class FileCache implements ICache {
 			} else {
 				return null;
 			}
+		}
+	}
+
+	public function getObjects($type, $objectIds) {
+		if (is_array($objectIds)) {
+			$cached_objects = array();
+			$uncached_objects = array();
+			foreach ($objectIds as $objectId) {
+				$cached = $this->getObjectCache($objectId);
+				if ($cached != null) {
+					$cached_objects[$objectId] = json_decode($cached, true);
+				} else {
+					$uncached_objects[] = $objectId;
+				}
+			}
+			$uncached_objects = array_unique($uncached_objects);
+
+			if (count($uncached_objects) > 0) {
+				$chunks = array_chunk($uncached_objects, $this->options['chunk_size']);
+				foreach ($chunks as $chunk) {
+					if (count($chunk) > 1) {
+						$response = $this->client->get($type . '/' . implode(',', $chunk));
+
+						// only cache 2XX responses
+						if ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300) {
+							$data = $response->getData();
+							foreach ($data as $object) {
+								if (isset($object['id'])) {
+									$this->setObjectCache($object['id'], $object);
+									$cached_objects[$object['id']] = $object;
+								}
+							}
+						}
+					} else {
+						// chunk with one object has a different response format (no array)
+						$cached_objects[$chunk[0]] = $this->getObject($type, $chunk[0]);
+					}
+				}
+			}
+			return $cached_objects;
+		} else {
+			return null;
 		}
 	}
 

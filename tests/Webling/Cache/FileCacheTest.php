@@ -117,6 +117,113 @@ class FileCacheTest extends PHPUnit_Framework_TestCase
 		rmdir($CACHE_DIR);
 	}
 
+	public function testLoadMultipleObjectsFromCache()
+	{
+		$client = new ClientMock("demo.webling.dev", "6781b18c2616772de74043ed0c32f76f");
+		$cache = new FileCache($client);
+
+		$CACHE_DIR = $cache->getCacheDir();
+		$this->assertTrue(file_exists($CACHE_DIR));
+
+		$member = $cache->getObjects('member', [506,507,508]);
+		$this->assertEquals(3, count($member));
+		$this->assertArrayHasKey('properties', $member[507]);
+
+		// write some dummy content to check the file is loaded from cache
+		$dummycache = ['loadedfrom' => 'cache'];
+		file_put_contents($CACHE_DIR . '/obj_506.json', json_encode($dummycache));
+
+		$member = $cache->getObject('member', 506);
+		$this->assertEquals($dummycache, $member);
+
+		// cleanup
+		$cache->clearCache();
+		rmdir($CACHE_DIR);
+	}
+
+	public function testLoadMultipleObjectsPartiallyFromCache()
+	{
+		$client = new ClientMock("demo.webling.dev", "6781b18c2616772de74043ed0c32f76f");
+		$cache = new FileCache($client);
+
+		$CACHE_DIR = $cache->getCacheDir();
+		$this->assertTrue(file_exists($CACHE_DIR));
+
+		// write some dummy content to check the file is loaded from cache
+		$dummycache = ['loadedfrom' => 'cache'];
+		file_put_contents($CACHE_DIR . '/obj_508.json', json_encode($dummycache));
+
+		$member = $cache->getObjects('member', [506,507,508]);
+		$this->assertEquals(3, count($member));
+		$this->assertArrayHasKey('properties', $member[507]);
+		$this->assertEquals($dummycache, $member[508]);
+
+		$cached = json_decode(file_get_contents($CACHE_DIR . '/obj_507.json'), true);
+		$this->assertArrayHasKey('properties', $cached);
+
+		$cached = json_decode(file_get_contents($CACHE_DIR . '/obj_508.json'), true);
+		$this->assertEquals($dummycache, $cached);
+
+		// cleanup
+		$cache->clearCache();
+		rmdir($CACHE_DIR);
+	}
+
+	public function testLoadMultipleObjectsFromCacheWithChunks()
+	{
+		$client = new ClientMock("demo.webling.dev", "6781b18c2616772de74043ed0c32f76f");
+		$cache = new FileCache($client, array('chunk_size' => 2));
+
+		$CACHE_DIR = $cache->getCacheDir();
+		$this->assertTrue(file_exists($CACHE_DIR));
+
+		$member = $cache->getObjects('member', [506,507,508]);
+		$this->assertEquals(3, count($member));
+		$this->assertArrayHasKey('properties', $member[507]);
+
+		$cached = json_decode(file_get_contents($CACHE_DIR . '/obj_507.json'), true);
+		$this->assertArrayHasKey('properties', $cached);
+
+		$this->assertFileExists($CACHE_DIR . '/obj_506.json');
+		$this->assertFileExists($CACHE_DIR . '/obj_508.json');
+
+		// cleanup
+		$cache->clearCache();
+		rmdir($CACHE_DIR);
+	}
+
+	public function testLoadMultipleObjectsInvalidArgument()
+	{
+		$client = new ClientMock("demo.webling.dev", "6781b18c2616772de74043ed0c32f76f");
+		$cache = new FileCache($client);
+
+		$CACHE_DIR = $cache->getCacheDir();
+		$this->assertTrue(file_exists($CACHE_DIR));
+
+		$member = $cache->getObjects('member', null);
+		$this->assertNull($member);
+
+		// cleanup
+		$cache->clearCache();
+		rmdir($CACHE_DIR);
+	}
+
+	public function testLoadMultipleObjectsEmptyArgument()
+	{
+		$client = new ClientMock("demo.webling.dev", "6781b18c2616772de74043ed0c32f76f");
+		$cache = new FileCache($client);
+
+		$CACHE_DIR = $cache->getCacheDir();
+		$this->assertTrue(file_exists($CACHE_DIR));
+
+		$member = $cache->getObjects('member', []);
+		$this->assertEquals(array(), $member);
+
+		// cleanup
+		$cache->clearCache();
+		rmdir($CACHE_DIR);
+	}
+
 	public function testLoadRootFromCache()
 	{
 		$client = new ClientMock("demo.webling.dev", "6781b18c2616772de74043ed0c32f76f");

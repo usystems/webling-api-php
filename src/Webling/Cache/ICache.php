@@ -38,6 +38,20 @@ interface ICache
 	 */
 	public function getObject($type, $objectId);
 
+	/**
+	 * Returns multiple object data based on the objectIds
+	 * - Checks if the data exists in the cache and returns the data
+	 * - If the object is not in the cache, request data from the Webling api
+	 * - Return all data if the request were successful
+	 * - Requests objects in chunks for better performance
+	 *
+	 * @param $type string - the object type (e.g "member", "usergroup", ..)
+	 * @param $objectIds array - the ids of the objects to request
+	 * @return array|null
+	 * @throws CacheException
+	 */
+	public function getObjects($type, $objectIds);
+
 
 	/**
 	 * Get a root object of an endpoint (e.g "/member", "/config")
