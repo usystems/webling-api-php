@@ -8,9 +8,9 @@ interface ICacheAdapter
 
 	public function clearCache();
 
-	public function setIndex($data);
-	public function getIndex();
-	public function deleteIndex();
+	public function setCacheState($data);
+	public function getCacheState();
+	public function deleteCacheState();
 
 	public function getObject($id);
 	public function setObject($id, $data);

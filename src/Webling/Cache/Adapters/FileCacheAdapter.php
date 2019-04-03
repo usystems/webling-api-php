@@ -34,30 +34,30 @@ class FileCacheAdapter implements ICacheAdapter {
 		return $this->options['directory'];
 	}
 
-	private function indexFile() {
+	private function cacheStateFile() {
 		return $this->getCacheDir().'/index.json';
 	}
 
 	public function clearCache() {
 		array_map('unlink', glob($this->options['directory']."/obj_*.json"));
 		$this->deleteAllRoots();
-		$this->deleteIndex();
+		$this->deleteCacheState();
 	}
 
-	public function setIndex($data) {
-		file_put_contents($this->indexFile(), json_encode($data));
+	public function setCacheState($data) {
+		file_put_contents($this->cacheStateFile(), json_encode($data));
 	}
 
-	public function getIndex() {
-		if (file_exists($this->indexFile())) {
-			return json_decode(file_get_contents($this->indexFile()), true);
+	public function getCacheState() {
+		if (file_exists($this->cacheStateFile())) {
+			return json_decode(file_get_contents($this->cacheStateFile()), true);
 		} else {
 			return null;
 		}
 	}
 
-	public function deleteIndex() {
-		unlink($this->indexFile());
+	public function deleteCacheState() {
+		unlink($this->cacheStateFile());
 	}
 
 	public function getObject($id) {

@@ -16,10 +16,10 @@ interface ICache
 	function __construct(IClient $client, ICacheAdapter $cacheAdapter, $options = []);
 
 	/**
+	 * @param bool $force force an update
 	 * @return void
-	 * @throws CacheException
 	 */
-	public function updateCache();
+	public function updateCache($force = false);
 
 	/**
 	 * @return void

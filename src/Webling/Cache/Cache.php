@@ -23,15 +23,26 @@ class Cache implements ICache {
 			$this->options['chunk_size'] = 250;
 		}
 
+		if (!isset($this->options['pause_between_sync'])) {
+			// seconds to wait until next /replicate call is made
+			$this->options['pause_between_sync'] = 60;
+		}
+
 		$this->updateCache();
 	}
 
-	public function updateCache() {
-		$index = $this->cache->getIndex();
-		if ($index) {
-			if (isset($index['revision'])) {
+	public function updateCache($force = false) {
+		$cache_state = $this->cache->getCacheState();
+		if ($cache_state) {
+			if (isset($cache_state['revision'])) {
+				if (isset($cache_state['timestamp'])) {
+					if (!$force && $this->options['pause_between_sync'] > 0 && $cache_state['timestamp'] > time() - $this->options['pause_between_sync']) {
+						// wait a bit more for the next replication
+						return;
+					}
+				}
 
-				$replicate = $this->client->get('/replicate/'.$index['revision'])->getData();
+				$replicate = $this->client->get('/replicate/'.$cache_state['revision'])->getData();
 				if (isset($replicate['revision'])) {
 
 					if ($replicate['revision'] < 0) {
@@ -54,14 +65,14 @@ class Cache implements ICache {
 						// delete all root cache objects if the revision has changed
 						// this could be done more efficient, but lets keep it simple for simplicity
 						// For example additions won't be detected if we don't delete the roots
-						if ($index['revision'] != $replicate['revision']) {
+						if ($cache_state['revision'] != $replicate['revision']) {
 							$this->cache->deleteAllRoots();
 						}
 
-						// update index file
-						$index['revision'] = $replicate['revision'];
-						$index['timestamp'] = time();
-						$this->cache->setIndex($index);
+						// update cache state file
+						$cache_state['revision'] = $replicate['revision'];
+						$cache_state['timestamp'] = time();
+						$this->cache->setCacheState($cache_state);
 					}
 
 				} else {
@@ -70,13 +81,13 @@ class Cache implements ICache {
 				return;
 			}
 		}
-		// write initial index file
+		// write initial cache state file
 		$replicate = $this->client->get('/replicate')->getData();
 		$data = [
 			'revision' => $replicate['revision'],
 			'timestamp' => time(),
 		];
-		$this->cache->setIndex($data);
+		$this->cache->setCacheState($data);
 	}
 
 	public function clearCache() {

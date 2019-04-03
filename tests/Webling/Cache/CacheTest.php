@@ -80,7 +80,7 @@ class CacheTest extends PHPUnit_Framework_TestCase
 	{
 		$client = new ClientMock("demo.webling.dev", "6781b18c2616772de74043ed0c32f76f");
 		$adapter = new FileCacheAdapter();
-		$cache = new Cache($client, $adapter);
+		$cache = new Cache($client, $adapter, array('pause_between_sync' => 0));
 
 		$this->assertTrue(file_exists($this->CACHE_DIR));
 
