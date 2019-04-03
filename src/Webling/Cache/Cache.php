@@ -76,6 +76,7 @@ class Cache implements ICache {
 					}
 
 				} else {
+					$this->clearCache();
 					throw new CacheException('Error in replication. No revision found.');
 				}
 				return;
@@ -83,11 +84,13 @@ class Cache implements ICache {
 		}
 		// write initial cache state file
 		$replicate = $this->client->get('/replicate')->getData();
-		$data = [
-			'revision' => $replicate['revision'],
-			'timestamp' => time(),
-		];
-		$this->cache->setCacheState($data);
+		if (isset($replicate['revision'])) {
+			$data = [
+				'revision' => $replicate['revision'],
+				'timestamp' => time(),
+			];
+			$this->cache->setCacheState($data);
+		}
 	}
 
 	public function clearCache() {

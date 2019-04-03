@@ -57,7 +57,9 @@ class FileCacheAdapter implements ICacheAdapter {
 	}
 
 	public function deleteCacheState() {
-		unlink($this->cacheStateFile());
+		if (file_exists($this->cacheStateFile())) {
+			unlink($this->cacheStateFile());
+		}
 	}
 
 	public function getObject($id) {

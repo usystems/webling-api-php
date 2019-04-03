@@ -58,7 +58,6 @@ class CacheTest extends PHPUnit_Framework_TestCase
 		$adapter = new FileCacheAdapter();
 		$cache = new Cache($client, $adapter);
 
-
 		$this->assertTrue(file_exists($this->CACHE_DIR));
 
 		$member = $cache->getObject('member', 506);
