@@ -45,17 +45,18 @@ For more examples see the "examples" folder.
 
 ### Caching Data
 
-If you are doing lots of GET requests, you may want to use a cache. The FileCache lets you cache Webling API requests on the filesystem. 
+If you are doing lots of GET requests, you may want to use a cache. The Cache Class in combination with the FileCacheAdapter lets you cache Webling API requests on the filesystem. 
 It does check which objects have changed and only fetches the changed objects.
 
-This is how you use the FileCache:
+This is how you use the Cache:
 
 ```php
 // create a cache object
 $client = new Webling\API\Client('https://demo.webling.ch','MY_APIKEY')
-$cache = new Webling\Cache\FileCache($client, [
-    'directory' => './webling_cache'
+$adapter = new Webling\Cache\Adapters\FileCacheAdapter([
+	'directory' => './webling_cache'
 ]);
+$cache = new Webling\Cache\Cache($client, $adapter);
 
 // get single object
 $cache->getObject('member', 506);

@@ -3,15 +3,17 @@
 namespace Webling\Cache;
 
 use Webling\API\IClient;
+use Webling\Cache\Adapters\ICacheAdapter;
 
 interface ICache
 {
 	/**
 	 * IClient constructor.
 	 * @param IClient $client - an instance of Webling\API\IClient
+	 * @param ICacheAdapter $cacheAdapter - an instance of Webling\Cache\ICacheAdapter
 	 * @param array $options - any optional cache specific options
 	 */
-	function __construct(IClient $client, $options = []);
+	function __construct(IClient $client, ICacheAdapter $cacheAdapter, $options = []);
 
 	/**
 	 * @return void
