@@ -85,3 +85,8 @@ To use this library you need at least:
 ## API Documentation
 
 You can find the Full Documentation of the Webling REST-API at [demo.webling.ch/api](https://demo.webling.ch/api)
+
+## Changelog
+##### v1.2.0
+The `Webling\Cache\FileCache` has been marked as deprected and will be removed in the future. Use the more generic `Webling\Cache\Cache` with the `Webling\CacheAdapters\FileCacheAdapter` instead.
+
