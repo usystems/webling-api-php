@@ -69,6 +69,25 @@ class CurlHttpMock extends CurlHttp
 				404,
 				''
 			),
+			'https://demo.webling.dev/api/1/member/506,507,508' => array(
+				200,
+				'[
+					{"id":506,"type":"member","readonly":false,"properties":{"ID":38,"Vorname":"Markus"},"children":[],"parents":[555],"links":{}},
+					{"id":507,"type":"member","readonly":false,"properties":{"ID":39,"Vorname":"Hans"},"children":[],"parents":[555],"links":{}},
+					{"id":508,"type":"member","readonly":false,"properties":{"ID":40,"Vorname":"Peter"},"children":[],"parents":[555],"links":{}}
+				]'
+			),
+			'https://demo.webling.dev/api/1/member/506,507' => array(
+				200,
+				'[
+					{"id":506,"type":"member","readonly":false,"properties":{"ID":38,"Vorname":"Markus"},"children":[],"parents":[555],"links":{}},
+					{"id":507,"type":"member","readonly":false,"properties":{"ID":39,"Vorname":"Hans"},"children":[],"parents":[555],"links":{}}
+				]'
+			),
+			'https://demo.webling.dev/api/1/member/508' => array(
+				200,
+				'{"id":508,"type":"member","readonly":false,"properties":{"ID":40,"Vorname":"Peter"},"children":[],"parents":[555],"links":{}}'
+			),
 
 		),
 		'PUT' => array(

@@ -1,3 +1,4 @@
 composer.phar
 /vendor/
 /tests/coverage
+/examples/webling_cache
