@@ -1,6 +1,6 @@
 <?php
 
-namespace Webling\Cache\Adapters;
+namespace Webling\CacheAdapters;
 
 use Webling\Cache\CacheException;
 

@@ -3,7 +3,7 @@
 namespace Webling\Cache;
 
 use Webling\API\IClient;
-use Webling\Cache\Adapters\ICacheAdapter;
+use Webling\CacheAdapters\ICacheAdapter;
 
 class Cache implements ICache {
 

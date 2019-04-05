@@ -1,6 +1,6 @@
 <?php
 
-use Webling\Cache\Adapters\FileCacheAdapter;
+use Webling\CacheAdapters\FileCacheAdapter;
 
 // Autoload files using Composer autoload
 require_once __DIR__ . '/../vendor/autoload.php';

@@ -7,7 +7,7 @@ require_once __DIR__ . '/../API/Mocks/CurlHttpMock.php';
 
 use Webling\API\ClientMock;
 use Webling\Cache\Cache;
-use Webling\Cache\Adapters\FileCacheAdapter;
+use Webling\CacheAdapters\FileCacheAdapter;
 
 class CacheTest extends PHPUnit_Framework_TestCase
 {
