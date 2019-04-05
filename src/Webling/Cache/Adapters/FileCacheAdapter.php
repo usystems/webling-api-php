@@ -9,6 +9,10 @@ class FileCacheAdapter implements ICacheAdapter {
 	protected $options;
 
 	function __construct($options = []) {
+		if (!is_array($options)) {
+			throw new CacheException('Invalid options');
+		}
+
 		$this->options = $options;
 
 		if (!isset($this->options['directory'])) {
@@ -39,7 +43,7 @@ class FileCacheAdapter implements ICacheAdapter {
 	}
 
 	public function clearCache() {
-		array_map('unlink', glob($this->options['directory']."/obj_*.json"));
+		array_map(array($this, 'deleteFile'), glob($this->options['directory']."/obj_*.json"));
 		$this->deleteAllRoots();
 		$this->deleteCacheState();
 	}
@@ -57,9 +61,7 @@ class FileCacheAdapter implements ICacheAdapter {
 	}
 
 	public function deleteCacheState() {
-		if (file_exists($this->cacheStateFile())) {
-			unlink($this->cacheStateFile());
-		}
+		$this->deleteFile($this->cacheStateFile());
 	}
 
 	public function getObject($id) {
@@ -81,12 +83,7 @@ class FileCacheAdapter implements ICacheAdapter {
 	public function deleteObject($id) {
 		$id = intval($id);
 		$file = $this->getCacheDir().'/obj_'.$id.'.json';
-		if (file_exists($file)) {
-			@unlink($file);
-			if (file_exists($file)) {
-				throw new CacheException('Could not delete cache file: ' . $file);
-			}
-		}
+		$this->deleteFile($file);
 	}
 
 	public function getRoot($type) {
@@ -107,13 +104,19 @@ class FileCacheAdapter implements ICacheAdapter {
 
 	public function deleteRoot($type) {
 		$file = $this->getCacheDir()."/root_".strtolower($type).".json";
-		@unlink($file);
-		if (file_exists($file)) {
-			throw new CacheException('Could not delete cache file: ' . $file);
-		}
+		$this->deleteFile($file);
 	}
 
 	public function deleteAllRoots() {
-		array_map('unlink', glob($this->getCacheDir()."/root_*.json"));
+		array_map(array($this, 'deleteFile'), glob($this->getCacheDir()."/root_*.json"));
+	}
+
+	private function deleteFile($filename) {
+		if (file_exists($filename)) {
+			@unlink($filename);
+			if (file_exists($filename)) {
+				throw new CacheException('Could not delete cache file: ' . $filename);
+			}
+		}
 	}
 }
