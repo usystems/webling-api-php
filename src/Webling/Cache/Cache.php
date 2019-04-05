@@ -107,6 +107,8 @@ class Cache implements ICache {
 			// only cache 2XX responses
 			if ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300) {
 				$data = $response->getData();
+				// the single response does not have the id attribute, set it here for consistency
+				$data['id'] = $objectId;
 				$this->adapter->setObject($objectId, $data);
 				return $data;
 			} else {
