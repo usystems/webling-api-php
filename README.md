@@ -16,9 +16,9 @@ Install with Composer:
 ### Simple usage
 
 ```php
-$api = new Webling\API\Client('https://demo.webling.ch','MY_APIKEY')
+$api = new Webling\API\Client('https://demo.webling.ch','MY_APIKEY');
 
-$response = $api->get('member/123')
+$response = $api->get('member/123');
 
 if ($response->getStatusCode() < 400) {
     var_dump($response->getData());    // returns the parsed JSON
@@ -38,7 +38,7 @@ $options = [
     'timeout' => 10, // transfer timeout
     'useragent' => 'My Custom User-Agent' // custom user agent
 ];
-$api = new Webling\API\Client('https://demo.webling.ch','MY_APIKEY', $options)
+$api = new Webling\API\Client('https://demo.webling.ch','MY_APIKEY', $options);
 ```
 
 For more examples see the "examples" folder.
@@ -52,9 +52,9 @@ This is how you use the Cache:
 
 ```php
 // create a cache object
-$client = new Webling\API\Client('https://demo.webling.ch','MY_APIKEY')
+$client = new Webling\API\Client('https://demo.webling.ch','MY_APIKEY');
 $adapter = new Webling\CacheAdapters\FileCacheAdapter([
-	'directory' => './webling_cache'
+    'directory' => './webling_cache'
 ]);
 $cache = new Webling\Cache\Cache($client, $adapter);
 
@@ -65,7 +65,7 @@ $cache->getObject('member', 506);
 $cache->getObjects('member', [506, 507, 508]);
 
 // get object lists
-$cache->getObject('membergroup');
+$cache->getRoot('membergroup');
 
 // check for updates and renew cache
 $cache->updateCache();
