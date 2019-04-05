@@ -9,14 +9,14 @@ class Cache implements ICache {
 
 	protected $client;
 
-	protected $cache;
+	protected $adapter;
 
 	protected $options;
 
 	function __construct(IClient $client, ICacheAdapter $cacheAdapter, $options = []) {
 		$this->client = $client;
 		$this->options = $options;
-		$this->cache = $cacheAdapter;
+		$this->adapter = $cacheAdapter;
 
 		if (!isset($this->options['chunk_size'])) {
 			// how many objects to fetch at once
@@ -32,7 +32,7 @@ class Cache implements ICache {
 	}
 
 	public function updateCache($force = false) {
-		$cache_state = $this->cache->getCacheState();
+		$cache_state = $this->adapter->getCacheState();
 		if ($cache_state) {
 			if (isset($cache_state['revision'])) {
 				if (isset($cache_state['timestamp'])) {
@@ -48,17 +48,17 @@ class Cache implements ICache {
 					if ($replicate['revision'] < 0) {
 						// if revision is set to -1, clear cache and make a complete sync
 						// this happens when the users permission have changed
-						$this->cache->clearCache();
+						$this->adapter->clearCache();
 					} else if(count($replicate['definitions']) > 0) {
 						// if definitions changed, clear cache and make a complete sync
 						// because member data may be invalid now
-						$this->cache->clearCache();
+						$this->adapter->clearCache();
 					} else {
 
 						// delete cached objects
 						foreach ($replicate['objects'] as $objCategory) {
 							foreach ($objCategory as $objId) {
-								$this->cache->deleteObject($objId);
+								$this->adapter->deleteObject($objId);
 							}
 						}
 
@@ -66,13 +66,13 @@ class Cache implements ICache {
 						// this could be done more efficient, but lets keep it simple for simplicity
 						// For example additions won't be detected if we don't delete the roots
 						if ($cache_state['revision'] != $replicate['revision']) {
-							$this->cache->deleteAllRoots();
+							$this->adapter->deleteAllRoots();
 						}
 
 						// update cache state file
 						$cache_state['revision'] = $replicate['revision'];
 						$cache_state['timestamp'] = time();
-						$this->cache->setCacheState($cache_state);
+						$this->adapter->setCacheState($cache_state);
 					}
 
 				} else {
@@ -89,16 +89,16 @@ class Cache implements ICache {
 				'revision' => $replicate['revision'],
 				'timestamp' => time(),
 			];
-			$this->cache->setCacheState($data);
+			$this->adapter->setCacheState($data);
 		}
 	}
 
 	public function clearCache() {
-		$this->cache->clearCache();
+		$this->adapter->clearCache();
 	}
 
 	public function getObject($type, $objectId) {
-		$cached = $this->cache->getObject($objectId);
+		$cached = $this->adapter->getObject($objectId);
 		if ($cached != null) {
 			return json_decode($cached, true);
 		} else {
@@ -107,7 +107,7 @@ class Cache implements ICache {
 			// only cache 2XX responses
 			if ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300) {
 				$data = $response->getData();
-				$this->cache->setObject($objectId, $data);
+				$this->adapter->setObject($objectId, $data);
 				return $data;
 			} else {
 				return null;
@@ -120,7 +120,7 @@ class Cache implements ICache {
 			$cached_objects = array();
 			$uncached_objects = array();
 			foreach ($objectIds as $objectId) {
-				$cached = $this->cache->getObject($objectId);
+				$cached = $this->adapter->getObject($objectId);
 				if ($cached != null) {
 					$cached_objects[$objectId] = json_decode($cached, true);
 				} else {
@@ -140,7 +140,7 @@ class Cache implements ICache {
 							$data = $response->getData();
 							foreach ($data as $object) {
 								if (isset($object['id'])) {
-									$this->cache->setObject($object['id'], $object);
+									$this->adapter->setObject($object['id'], $object);
 									$cached_objects[$object['id']] = $object;
 								}
 							}
@@ -159,7 +159,7 @@ class Cache implements ICache {
 
 	public function getRoot($type) {
 		$type = preg_replace('/[^a-z]/i', '', strtolower($type));
-		$cached = $this->cache->getRoot($type);
+		$cached = $this->adapter->getRoot($type);
 		if ($cached != null) {
 			return json_decode($cached, true);
 		} else {
@@ -168,7 +168,7 @@ class Cache implements ICache {
 			// only cache 2XX responses
 			if ($response->getStatusCode() <= 200 && $response->getStatusCode() < 300) {
 				$data = $response->getData();
-				$this->cache->setRoot($type, $data);
+				$this->adapter->setRoot($type, $data);
 				return $data;
 			} else {
 				return null;
