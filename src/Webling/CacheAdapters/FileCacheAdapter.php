@@ -68,7 +68,7 @@ class FileCacheAdapter implements ICacheAdapter {
 		$id = intval($id);
 		$file = $this->getCacheDir().'/obj_'.$id.'.json';
 		if (file_exists($file)) {
-			return file_get_contents($file);
+			return json_decode(file_get_contents($file), true);
 		} else {
 			return null;
 		}

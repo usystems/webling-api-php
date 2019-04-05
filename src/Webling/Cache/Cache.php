@@ -100,7 +100,7 @@ class Cache implements ICache {
 	public function getObject($type, $objectId) {
 		$cached = $this->adapter->getObject($objectId);
 		if ($cached != null) {
-			return json_decode($cached, true);
+			return $cached;
 		} else {
 			$response = $this->client->get($type.'/'.$objectId);
 
@@ -122,7 +122,7 @@ class Cache implements ICache {
 			foreach ($objectIds as $objectId) {
 				$cached = $this->adapter->getObject($objectId);
 				if ($cached != null) {
-					$cached_objects[$objectId] = json_decode($cached, true);
+					$cached_objects[$objectId] = $cached;
 				} else {
 					$uncached_objects[] = $objectId;
 				}
