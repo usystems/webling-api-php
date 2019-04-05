@@ -161,7 +161,7 @@ class Cache implements ICache {
 		$type = preg_replace('/[^a-z]/i', '', strtolower($type));
 		$cached = $this->adapter->getRoot($type);
 		if ($cached != null) {
-			return json_decode($cached, true);
+			return $cached;
 		} else {
 			$response = $this->client->get($type);
 
