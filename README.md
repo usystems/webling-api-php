@@ -96,6 +96,7 @@ Support for binary files caching has been added.
 
  * The interface `ICache` now has a new function `getObjectBinary()`. 
  * The `FileCacheAdapter` and `IFileCacheAdapter` has been updated to support the new functions.
+ * Starting this release, only PHP >= 5.6 is tested and supported
 
 ##### v1.2.0
 The `Webling\Cache\FileCache` has been marked as deprected and will be removed in the future. Use the more generic `Webling\Cache\Cache` with the `Webling\CacheAdapters\FileCacheAdapter` instead.
