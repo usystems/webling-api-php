@@ -59,6 +59,7 @@ class Cache implements ICache {
 						foreach ($replicate['objects'] as $objCategory) {
 							foreach ($objCategory as $objId) {
 								$this->adapter->deleteObject($objId);
+								$this->adapter->deleteObjectBinaries($objId);
 							}
 						}
 
@@ -115,6 +116,27 @@ class Cache implements ICache {
 				return null;
 			}
 		}
+	}
+	
+	public function getObjectBinary($type, $objectId, $url) {
+		if ($url) {
+			$cached = $this->adapter->getObjectBinary($objectId, $url);
+			if ($cached != null) {
+				return $cached;
+			} else {
+				// remove /api/1/ from the beginning of the url, if present
+				$prepared_url = preg_replace('/^(\/api\/\d*\/)/','', $url);
+				$response = $this->client->get($prepared_url);
+
+				// only cache 2XX responses
+				if ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300) {
+					$data = $response->getData();
+					$this->adapter->setObjectBinary($objectId, $url, $data);
+					return $data;
+				}
+			}
+		}
+		return null;
 	}
 
 	public function getObjects($type, $objectIds) {

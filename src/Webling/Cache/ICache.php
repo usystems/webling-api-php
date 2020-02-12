@@ -41,6 +41,20 @@ interface ICache
 	public function getObject($type, $objectId);
 
 	/**
+	 * Returns the object data based on the objectId
+	 * - Checks if the data exists in the cache and returns the data
+	 * - If the object is not in the cache, request data from the Webling api
+	 * - Return data if request was successful
+	 *
+	 * @param $type string - the object type (e.g "member", "usergroup", ..)
+	 * @param $objectId number - the id of the requested object
+	 * @param $url string - url of the binary file
+	 * @return array|null
+	 * @throws CacheException
+	 */
+	public function getObjectBinary($type, $objectId, $url);
+
+	/**
 	 * Returns multiple object data based on the objectIds
 	 * - Checks if the data exists in the cache and returns the data
 	 * - If the object is not in the cache, request data from the Webling api

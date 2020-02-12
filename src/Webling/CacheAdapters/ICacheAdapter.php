@@ -54,6 +54,28 @@ interface ICacheAdapter {
 	public function deleteObject($id);
 
 	/**
+	 * @param $id number|string id of the object to retrieve from the cache
+	 * @param $url string - url of the binary file
+	 * @return string|null the cached response from the api
+	 */
+	public function getObjectBinary($id, $url);
+
+	/**
+	 * @param $id number|string id of the object to write to the cache
+	 * @param $url string - url of the binary file
+	 * @param $data string data to be written to the cache (response from the api)
+	 * @return void
+	 */
+	public function setObjectBinary($id, $url, $data);
+
+	/**
+	 * delete the cached version of an object
+	 * @param $id number|string id of the object to delete from the cache
+	 * @return void
+	 */
+	public function deleteObjectBinaries($id);
+
+	/**
 	 * @param $type string name of the root type to retrieve from the cache (e.g "membergroup")
 	 * @return array|null the cached response from the api
 	 */

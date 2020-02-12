@@ -228,6 +228,28 @@ class CacheTest extends PHPUnit_Framework_TestCase
 		rmdir($this->CACHE_DIR);
 	}
 
+	public function testLoadObjectBinaryFromCache()
+	{
+		$client = new ClientMock("demo.webling.dev", "6781b18c2616772de74043ed0c32f76f");
+		$adapter = new FileCacheAdapter();
+		$cache = new Cache($client, $adapter);
+
+		$binary = $cache->getObjectBinary('member', 506, '/api/1/member/506/image/Mitgliederbild.jpeg');
+		$this->assertEquals('IMAGE_DATA', $binary);
+
+		// write some dummy content to check the file is loaded from cache
+		$dummycache = 'loaded_from_cache';
+		$filename = '/bin_506_'.md5(strtolower('/api/1/member/506/image/Mitgliederbild.jpeg'));
+		file_put_contents($this->CACHE_DIR . $filename, $dummycache);
+
+		$binary = $cache->getObjectBinary('member', 506, '/api/1/member/506/image/Mitgliederbild.jpeg');
+		$this->assertEquals($dummycache, $binary);
+
+		// cleanup
+		$cache->clearCache();
+		rmdir($this->CACHE_DIR);
+	}
+
 	public function testLoadRootFromCache()
 	{
 		$client = new ClientMock("demo.webling.dev", "6781b18c2616772de74043ed0c32f76f");

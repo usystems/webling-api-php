@@ -44,6 +44,10 @@ class CurlHttpMock extends CurlHttp
 				200,
 				'{"type":"member","readonly":false,"properties":{"ID":38,"Vorname":"Markus"},"children":[],"parents":[555],"links":{"debitor":[885,1138,1902]}}'
 			),
+			'https://demo.webling.dev/api/1/member/506/image/Mitgliederbild.jpeg' => array(
+				200,
+				'IMAGE_DATA'
+			),
 			'https://demo.webling.dev/api/1/membergroup/550' => array(
 				200,
 				'{"type":"membergroup","readonly":false,"properties":{"title":"Mitglieder"},"children":{"membergroup":[555,551,556,558,552]},"parents":[],"links":[]}'

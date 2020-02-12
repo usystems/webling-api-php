@@ -59,7 +59,10 @@ $adapter = new Webling\CacheAdapters\FileCacheAdapter([
 $cache = new Webling\Cache\Cache($client, $adapter);
 
 // get single object
-$cache->getObject('member', 506);
+$member = $cache->getObject('member', 506);
+
+// get binary data of object
+$cache->getObjectBinary('member', 506, $member['properties']['Mitgliederbild']['href']);
 
 // get multiple objects
 $cache->getObjects('member', [506, 507, 508]);
@@ -77,7 +80,7 @@ $cache->clearCache();
 
 To use this library you need at least:
 
- * PHP >=5.4
+ * PHP >=5.6
  * PHP cURL Extension
  * PHP JSON Extension
  * A [Webling](https://www.webling.ch) Account with API enabled
@@ -87,6 +90,13 @@ To use this library you need at least:
 You can find the Full Documentation of the Webling REST-API at [demo.webling.ch/api](https://demo.webling.ch/api)
 
 ## Changelog
+
+##### v1.3.0
+Support for binary files caching has been added.
+
+ * The interface `ICache` now has a new function `getObjectBinary()`. 
+ * The `FileCacheAdapter` and `IFileCacheAdapter` has been updated to support the new functions.
+ * Starting this release, only PHP >= 5.6 is tested and supported
+
 ##### v1.2.0
 The `Webling\Cache\FileCache` has been marked as deprected and will be removed in the future. Use the more generic `Webling\Cache\Cache` with the `Webling\CacheAdapters\FileCacheAdapter` instead.
-
