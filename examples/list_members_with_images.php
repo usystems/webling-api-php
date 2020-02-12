@@ -37,10 +37,7 @@ if ($response != null) {
 				echo '<h3>'.$member['properties']['Vorname'] . ' ' . $member['properties']['Name'] . "<h3>\n";
 				// show image
 				if ($member['properties']['Mitgliederbild'] !== null) {
-					$img = $cache->getObjectBinary('member', $member['id'], $member['properties']['Mitgliederbild']['href']);
-					if (strlen($img)) {
-						echo '<img src="data:image/png;base64,'.base64_encode($img).'" height="100">';
-					}
+					echo '<img src="image_proxy.php?id='.$member['id'].'&property=Mitgliederbild" height="100">';
 				}
 			}
 		} else {
