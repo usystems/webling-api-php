@@ -43,7 +43,8 @@ class FileCacheAdapter implements ICacheAdapter {
 	}
 
 	public function clearCache() {
-		array_map(array($this, 'deleteFile'), glob($this->options['directory']."/obj_*.json"));
+		array_map(array($this, 'deleteFile'), glob($this->options['directory'].'/obj_*.json'));
+		array_map(array($this, 'deleteFile'), glob($this->options['directory'].'/bin_*'));
 		$this->deleteAllRoots();
 		$this->deleteCacheState();
 	}
@@ -86,6 +87,27 @@ class FileCacheAdapter implements ICacheAdapter {
 		$this->deleteFile($file);
 	}
 
+	public function getObjectBinary($id, $url) {
+		$id = intval($id);
+		$file = $this->getCacheDir().'/bin_'.$id.'_'.md5(strtolower($url));
+		if (file_exists($file)) {
+			return file_get_contents($file);
+		} else {
+			return null;
+		}
+	}
+
+	public function setObjectBinary($id, $url, $data) {
+		$id = intval($id);
+		$file = $this->getCacheDir().'/bin_'.$id.'_' . md5(strtolower($url));
+		file_put_contents($file, $data);
+	}
+
+	public function deleteObjectBinaries($id) {
+		$id = intval($id);
+		array_map(array($this, 'deleteFile'), glob($this->options['directory'].'/bin_'.$id.'_*'));
+	}
+
 	public function getRoot($type) {
 		$type = preg_replace('/[^a-z]/i', '', strtolower($type));
 		$file = $this->getCacheDir().'/root_'.$type.'.json';
@@ -103,12 +125,12 @@ class FileCacheAdapter implements ICacheAdapter {
 	}
 
 	public function deleteRoot($type) {
-		$file = $this->getCacheDir()."/root_".strtolower($type).".json";
+		$file = $this->getCacheDir().'/root_'.strtolower($type).'.json';
 		$this->deleteFile($file);
 	}
 
 	public function deleteAllRoots() {
-		array_map(array($this, 'deleteFile'), glob($this->getCacheDir()."/root_*.json"));
+		array_map(array($this, 'deleteFile'), glob($this->getCacheDir().'/root_*.json'));
 	}
 
 	private function deleteFile($filename) {
