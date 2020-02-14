@@ -87,7 +87,7 @@ class FileCacheAdapter implements ICacheAdapter {
 		$this->deleteFile($file);
 	}
 
-	public function getObjectBinary($id, $url) {
+	public function getObjectBinary($id, $url, $options = []) {
 		$id = intval($id);
 		$file = $this->getCacheDir().'/bin_'.$id.'_'.md5(strtolower($url));
 		if (file_exists($file)) {

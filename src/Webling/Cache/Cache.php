@@ -118,9 +118,9 @@ class Cache implements ICache {
 		}
 	}
 	
-	public function getObjectBinary($type, $objectId, $url) {
+	public function getObjectBinary($type, $objectId, $url, $options = []) {
 		if ($url) {
-			$cached = $this->adapter->getObjectBinary($objectId, $url);
+			$cached = $this->adapter->getObjectBinary($objectId, $url, $options);
 			if ($cached != null) {
 				return $cached;
 			} else {

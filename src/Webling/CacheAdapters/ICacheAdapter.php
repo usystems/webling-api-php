@@ -56,9 +56,10 @@ interface ICacheAdapter {
 	/**
 	 * @param $id number|string id of the object to retrieve from the cache
 	 * @param $url string - url of the binary file
+	 * @param $options array - extra options such as width/height for images
 	 * @return string|null the cached response from the api
 	 */
-	public function getObjectBinary($id, $url);
+	public function getObjectBinary($id, $url, $options = []);
 
 	/**
 	 * @param $id number|string id of the object to write to the cache

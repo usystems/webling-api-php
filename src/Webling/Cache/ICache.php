@@ -49,10 +49,11 @@ interface ICache
 	 * @param $type string - the object type (e.g "member", "usergroup", ..)
 	 * @param $objectId number - the id of the requested object
 	 * @param $url string - url of the binary file
+	 * @param $options array - extra options such as width/height for images
 	 * @return array|null
 	 * @throws CacheException
 	 */
-	public function getObjectBinary($type, $objectId, $url);
+	public function getObjectBinary($type, $objectId, $url, $options = []);
 
 	/**
 	 * Returns multiple object data based on the objectIds
