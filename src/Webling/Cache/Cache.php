@@ -132,7 +132,7 @@ class Cache implements ICache {
 				if ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300) {
 					$data = $response->getData();
 					$this->adapter->setObjectBinary($objectId, $url, $data);
-					return $data;
+					return $this->adapter->getObjectBinary($objectId, $url, $options);
 				}
 			}
 		}
