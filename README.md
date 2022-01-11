@@ -1,7 +1,6 @@
 # Webling API Wrapper for PHP
 
-[![Build Status](https://travis-ci.org/usystems/webling-api-php.svg?branch=master)](https://travis-ci.org/usystems/webling-api-php)
-[![Coverage Status](https://coveralls.io/repos/github/usystems/webling-api-php/badge.svg?branch=master)](https://coveralls.io/github/usystems/webling-api-php?branch=master)
+[![Build](https://github.com/usystems/webling-api-php/actions/workflows/ci.yml/badge.svg)](https://github.com/usystems/webling-api-php/actions/workflows/ci.yml)
 
 A Lightweight PHP Wrapper to query the [Webling](https://www.webling.ch/) API.
 
