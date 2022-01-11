@@ -3,9 +3,10 @@
 // Autoload files using Composer autoload
 require_once __DIR__ . '/../../../vendor/autoload.php';
 
+use PHPUnit\Framework\TestCase;
 use Webling\API\Response;
 
-class ResponseTest extends PHPUnit_Framework_TestCase
+class ResponseTest extends TestCase
 {
 
 	public function testStatusCode()

@@ -5,9 +5,10 @@ require_once __DIR__ . '/../../../vendor/autoload.php';
 require_once __DIR__ . '/Mocks/ClientMock.php';
 require_once __DIR__ . '/Mocks/CurlHttpMock.php';
 
+use PHPUnit\Framework\TestCase;
 use Webling\API\CurlHttp;
 
-class CurlHttpTest extends PHPUnit_Framework_TestCase
+class CurlHttpTest extends TestCase
 {
 
 	public function testCurlHttp()
@@ -19,15 +20,14 @@ class CurlHttpTest extends PHPUnit_Framework_TestCase
 		$reponse = $curl->curl_exec();
 		$error = $curl->curl_error();
 		$info = $curl->curl_getinfo();
+		$this->assertGreaterThanOrEqual(200, $info['http_code']);
 		$curl->curl_close();
 	}
 
-	/**
-	 * @expectedException Webling\API\ClientException
-	 * @expectedExceptionMessage Could not connect to: GET https://any-non-existing-domain.tv
-	 */
 	public function testCurlHttps()
 	{
+		$this->expectExceptionMessage("Could not connect to: GET https://any-non-existing-domain.tv");
+		$this->expectException(Webling\API\ClientException::class);
 		$curl = new CurlHttp();
 		$curl->curl_setopt(CURLOPT_URL, 'https://any-non-existing-domain.tv');
 		$curl->curl_setopt(CURLOPT_CUSTOMREQUEST, 'GET');
