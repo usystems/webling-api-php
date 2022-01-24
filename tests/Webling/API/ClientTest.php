@@ -5,9 +5,10 @@ require_once __DIR__ . '/../../../vendor/autoload.php';
 require_once __DIR__ . '/Mocks/ClientMock.php';
 require_once __DIR__ . '/Mocks/CurlHttpMock.php';
 
+use PHPUnit\Framework\TestCase;
 use Webling\API\ClientMock;
 
-class ClientTest extends PHPUnit_Framework_TestCase
+class ClientTest extends TestCase
 {
 
 	public function testGet()
@@ -31,32 +32,27 @@ class ClientTest extends PHPUnit_Framework_TestCase
 		$this->assertArrayHasKey('objects', $response->getData());
 	}
 
-	/**
-	 * @expectedException Webling\API\ClientException
-	 * @expectedExceptionMessage Could not connect to
-	 */
 	public function testGetInvalidDomain()
 	{
+		$this->expectExceptionMessage("Could not connect to");
+		$this->expectException(Webling\API\ClientException::class);
+
 		$client = new ClientMock("random.nonexisting.url.wbl", "6781b18c2616772de74043ed0c32f76f");
 		$client->get('/member');
 	}
 
-	/**
-	 * @expectedException Webling\API\ClientException
-	 * @expectedExceptionMessage Invalid domain
-	 */
 	public function testGetEmptyDomain()
 	{
+		$this->expectExceptionMessage("Invalid domain");
+		$this->expectException(Webling\API\ClientException::class);
 		$client = new ClientMock("", "6781b18c2616772de74043ed0c32f76f");
 		$client->get('/member');
 	}
 
-	/**
-	 * @expectedException Webling\API\ClientException
-	 * @expectedExceptionMessage Invalid apikey, the apikey must be 32 chars
-	 */
 	public function testGetInvalidApikey()
 	{
+		$this->expectExceptionMessage("Invalid apikey, the apikey must be 32 chars");
+		$this->expectException(Webling\API\ClientException::class);
 		$client = new ClientMock("http://demo.webling.dev", "abc");
 		$client->get('/member');
 	}
@@ -107,11 +103,9 @@ class ClientTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(204, $response->getStatusCode());
 	}
 
-	/**
-	 * @expectedException Webling\API\ClientException
-	 */
 	public function testPutInvalidJson()
 	{
+		$this->expectException(Webling\API\ClientException::class);
 		// test with an array data argument
 		$data = [
 			'properties' => [
@@ -123,11 +117,9 @@ class ClientTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(204, $response->getStatusCode());
 	}
 
-	/**
-	 * @expectedException Webling\API\ClientException
-	 */
 	public function testPutInvalidDomain()
 	{
+		$this->expectException(Webling\API\ClientException::class);
 		$client = new ClientMock("random.nonexisting.url.wbl", "6781b18c2616772de74043ed0c32f76f");
 		$client->put('/member/477', []);
 	}
@@ -152,11 +144,9 @@ class ClientTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(201, $response->getStatusCode());
 	}
 
-	/**
-	 * @expectedException Webling\API\ClientException
-	 */
 	public function testPostInvalidJson()
 	{
+		$this->expectException(Webling\API\ClientException::class);
 		// test with an array data argument
 		$data = [
 			'properties' => [
@@ -168,11 +158,9 @@ class ClientTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(204, $response->getStatusCode());
 	}
 
-	/**
-	 * @expectedException Webling\API\ClientException
-	 */
 	public function testPostInvalidDomain()
 	{
+		$this->expectException(Webling\API\ClientException::class);
 		$client = new ClientMock("random.nonexisting.url.wbl", "6781b18c2616772de74043ed0c32f76f");
 		$client->post('/member', []);
 	}
@@ -189,11 +177,9 @@ class ClientTest extends PHPUnit_Framework_TestCase
 		}
 	}
 
-	/**
-	 * @expectedException Webling\API\ClientException
-	 */
 	public function testDeleteInvalidDomain()
 	{
+		$this->expectException(Webling\API\ClientException::class);
 		$client = new ClientMock("random.nonexisting.url.wbl", "6781b18c2616772de74043ed0c32f76f");
 		$client->delete('/member/123');
 	}

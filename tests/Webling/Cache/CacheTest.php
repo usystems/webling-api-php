@@ -5,11 +5,12 @@ require_once __DIR__ . '/../../../vendor/autoload.php';
 require_once __DIR__ . '/../API/Mocks/ClientMock.php';
 require_once __DIR__ . '/../API/Mocks/CurlHttpMock.php';
 
+use PHPUnit\Framework\TestCase;
 use Webling\API\ClientMock;
 use Webling\Cache\Cache;
 use Webling\CacheAdapters\FileCacheAdapter;
 
-class CacheTest extends PHPUnit_Framework_TestCase
+class CacheTest extends TestCase
 {
 
 	private $CACHE_DIR = './webling_api_cache/';

@@ -1,0 +1,60 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: php-actions/composer@v5
+
+      - name: PHPUnit Tests PHP 7.0
+        uses: php-actions/phpunit@v3
+        with:
+          version: 6
+          php_version: 7.0
+          php_extensions: xdebug
+          bootstrap: vendor/autoload.php
+          configuration: tests/phpunit_coverage_old.xml
+          args: --coverage-text tests/
+        env:
+          XDEBUG_MODE: coverage
+
+      - name: PHPUnit Tests PHP 7.3
+        uses: php-actions/phpunit@v3
+        with:
+          version: 9.5
+          php_version: 7.3
+          php_extensions: xdebug
+          bootstrap: vendor/autoload.php
+          configuration: tests/phpunit_coverage.xml
+          args: --coverage-text tests/
+        env:
+          XDEBUG_MODE: coverage
+
+      - name: PHPUnit Tests PHP 8.0
+        uses: php-actions/phpunit@v3
+        with:
+          version: 9.5
+          php_version: 8.0
+          php_extensions: xdebug
+          bootstrap: vendor/autoload.php
+          configuration: tests/phpunit_coverage.xml
+          args: --coverage-text tests/
+        env:
+          XDEBUG_MODE: coverage
+
+      - name: PHPUnit Tests PHP 8.1
+        uses: php-actions/phpunit@v3
+        with:
+          version: 9.5
+          php_version: 8.1
+          php_extensions: xdebug
+          bootstrap: vendor/autoload.php
+          configuration: tests/phpunit_coverage.xml
+          args: --coverage-text tests/
+        env:
+          XDEBUG_MODE: coverage

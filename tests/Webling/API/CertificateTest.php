@@ -5,16 +5,15 @@ require_once __DIR__ . '/../../../vendor/autoload.php';
 require_once __DIR__ . '/Mocks/ClientMock.php';
 require_once __DIR__ . '/Mocks/CurlHttpMock.php';
 
+use PHPUnit\Framework\TestCase;
 use Webling\API\ClientMock;
 
-class CertificateTest extends PHPUnit_Framework_TestCase
+class CertificateTest extends TestCase
 {
 
-	/**
-	 * @expectedException Webling\API\ClientException
-	 */
 	public function testSelfSignedCertificateError()
 	{
+		$this->expectException(Webling\API\ClientException::class);
 		// self signed certificates should fail
 		// this is just a random site with a self signed certificate
 		$client = new ClientMock("https://www.pcwebshop.co.uk", "12345678901234567890123456789012");

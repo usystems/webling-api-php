@@ -2,3 +2,4 @@ composer.phar
 /vendor/
 /tests/coverage
 /examples/webling_cache
+.phpunit.result.cache
