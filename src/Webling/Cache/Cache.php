@@ -117,7 +117,7 @@ class Cache implements ICache {
 			}
 		}
 	}
-	
+
 	public function getObjectBinary($type, $objectId, $url, $options = []) {
 		if ($url) {
 			$cached = $this->adapter->getObjectBinary($objectId, $url, $options);
@@ -190,7 +190,7 @@ class Cache implements ICache {
 			$response = $this->client->get($type);
 
 			// only cache 2XX responses
-			if ($response->getStatusCode() <= 200 && $response->getStatusCode() < 300) {
+			if ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300) {
 				$data = $response->getData();
 				$this->adapter->setRoot($type, $data);
 				return $data;

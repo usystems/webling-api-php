@@ -90,6 +90,9 @@ You can find the Full Documentation of the Webling REST-API at [demo.webling.ch/
 
 ## Changelog
 
+##### v1.3.1
+ * Fixed a bug that prevented response caching from working properly
+
 ##### v1.3.0
 Support for binary files caching has been added.
 
@@ -98,4 +101,4 @@ Support for binary files caching has been added.
  * Starting this release, only PHP >= 5.6 is tested and supported
 
 ##### v1.2.0
-The `Webling\Cache\FileCache` has been marked as deprected and will be removed in the future. Use the more generic `Webling\Cache\Cache` with the `Webling\CacheAdapters\FileCacheAdapter` instead.
+The `Webling\Cache\FileCache` has been marked as deprecated and will be removed in the future. Use the more generic `Webling\Cache\Cache` with the `Webling\CacheAdapters\FileCacheAdapter` instead.
